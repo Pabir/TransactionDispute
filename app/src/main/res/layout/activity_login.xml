@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:gravity="center"
+     android:background="#f5f5f5"
+     android:padding="32dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="40dp"
+         android:textSize="28sp"
+         android:textColor="#2196F3"
+         android:text="Transaction Dispute App"
+         android:textStyle="bold" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="16dp"
+         android:textSize="18sp"
+         android:textColor="#333333"
+         android:text="Enter Passcode" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPasscode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter 30-character daily passcode"
+            android:inputType="textPassword"
+            android:maxLength="30"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:visibility="gone"
+         android:layout_marginBottom="16dp"
+         android:textSize="14sp"
+         android:textColor="#FF0000"
+         android:id="@+id/tvError"
+         android:text="Invalid passcode" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:textSize="18sp"
+         android:backgroundTint="#2196F3"
+         android:textColor="#FFFFFF"
+         android:id="@+id/btnLogin"
+         android:text="Login" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="12sp"
+         android:textColor="#666666"
+         android:layout_marginTop="20dp"
+         android:text="Default passcode: 1234" />
+
+</LinearLayout>
