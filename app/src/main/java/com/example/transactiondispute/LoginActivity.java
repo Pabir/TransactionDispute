@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.example.transactiondispute.R;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.transactiondispute.notecounter.NoteCounterActivity;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.Locale;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etPasscode;
+    private Button btnNoteCounter;
     private Button btnLogin;
     private TextView tvError;
     private static final String PREFS_NAME = "AppPrefs";
@@ -42,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
                 validatePasscode();
             }
         });
+
+        // Add in your MainActivity
+        Button btnNoteCounter = findViewById(R.id.btnNoteCounter); // You'll need to add this in XML
+        btnNoteCounter.setOnClickListener(
+                v -> {
+                    Intent intent = new Intent(LoginActivity.this, NoteCounterActivity.class);
+                    startActivity(intent);
+                });
     }
 
     private void initializeViews() {

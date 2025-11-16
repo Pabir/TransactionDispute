@@ -32,6 +32,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".notecounter.NoteCounterActivity"
+            android:exported="true" />
         <!-- FileProvider for sharing - exported=false because it's only for internal use -->
         <provider
             android:name="androidx.core.content.FileProvider"

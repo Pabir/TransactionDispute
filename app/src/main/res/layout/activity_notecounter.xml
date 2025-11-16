@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="8dp"
+         android:textSize="18sp"
+         android:text="Add New Notes:" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:orientation="vertical"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:text="₹500 Notes" />
+
+            <EditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:hint="0"
+                 android:inputType="number"
+                 android:id="@+id/etNew500" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:orientation="vertical"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:text="₹200 Notes" />
+
+            <EditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:hint="0"
+                 android:inputType="number"
+                 android:id="@+id/etNew200" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:orientation="vertical"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:text="₹100 Notes" />
+
+            <EditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:hint="0"
+                 android:inputType="number"
+                 android:id="@+id/etNew100" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="16dp"
+         android:id="@+id/btnAdd"
+         android:text="Add to Total" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:id="@+id/btnReset"
+         android:text="Reset All" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="18sp"
+         android:layout_marginTop="24dp"
+         android:text="Current Totals:" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:id="@+id/tvTotal500"
+         android:text="₹500 Notes: 0" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:id="@+id/tvTotal200"
+         android:text="₹200 Notes: 0" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:id="@+id/tvTotal100"
+         android:text="₹100 Notes: 0" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="20sp"
+         android:layout_marginTop="16dp"
+         android:id="@+id/tvGrandTotal"
+         android:textStyle="bold" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/DenomHeader"
+         android:text="₹500 Notes" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="After"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et500After" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="Before"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et500Before" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/DenomHeader"
+         android:text="₹200 Notes" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="After"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et200After" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="Before"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et200Before" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/DenomHeader"
+         android:text="₹100 Notes" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="After"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et100After" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:hint="Before"
+             style="@style/BeforeAfterInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="100dp"
+                 android:id="@+id/et100Before" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal"
+         android:layout_marginTop="16dp">
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:layout_weight="1"
+             android:id="@+id/btnCalculate"
+             android:text="Calculate" />
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:layout_weight="1"
+             android:id="@+id/btnReset2"
+             android:text="Reset" />
+
+    </LinearLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/ResultHeader"
+         android:text="Results" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/ResultItem"
+         android:id="@+id/tv500Used" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/ResultItem"
+         android:id="@+id/tv200Used" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/ResultItem"
+         android:id="@+id/tv100Used" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         style="@style/ResultTotal"
+         android:id="@+id/tvTotal" />
+        
+        <!-- Add this at the end of the LinearLayout, before the closing tag -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Developed by Sk Pabirul Islam"
+        android:layout_marginTop="24dp"
+        android:gravity="end"
+        android:textSize="12sp"
+        android:textStyle="italic" />
+
+    <!-- Add this at the end of the LinearLayout, before the closing tag -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="©All Rights Reserved by Sk Pabirul Islam"
+        android:layout_marginTop="24dp"
+        android:gravity="end"
+        android:textSize="12sp"
+        android:textStyle="italic" />
+
+</LinearLayout>
+</ScrollView>
