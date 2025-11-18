@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.transactiondispute.R;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
 import com.example.transactiondispute.notecounter.NoteCounterActivity;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnNoteCounter;
     private Button btnLogin;
     private TextView tvError;
+    private Button btnReport;
     private static final String PREFS_NAME = "AppPrefs";
     private static final String LAST_LOGIN_DATE = "last_login_date";
 
@@ -51,6 +53,12 @@ public class LoginActivity extends AppCompatActivity {
         btnNoteCounter.setOnClickListener(
                 v -> {
                     Intent intent = new Intent(LoginActivity.this, NoteCounterActivity.class);
+                    startActivity(intent);
+                });
+               Button btnReport = findViewById(R.id.btnReport); // You'll need to add this in XML
+        btnReport.setOnClickListener(
+                v -> {
+                    Intent intent = new Intent(LoginActivity.this, CashmanagementActivity.class);
                     startActivity(intent);
                 });
     }

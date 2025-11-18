@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="8dp"
+         android:id="@+id/btngotoDataEntry"
+         android:text="Data Entry" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="8dp"
+         android:id="@+id/btnSummary"
+         android:text="View Summary" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="8dp"
+         android:backgroundTint="#4CAF50"
+         android:id="@+id/btnExportExcel"
+         android:text="Export to Excel" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:gravity="center"
+         android:textSize="24sp"
+         android:text="Cash Management Live View"
+         android:textStyle="bold" />
+
+    <com.google.android.material.card.MaterialCardView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:elevation="4dp">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="16dp"
+             android:orientation="vertical">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:textSize="16sp"
+                 android:text="Filter by Date"
+                 android:textStyle="bold" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:orientation="horizontal">
+
+                <Button
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:layout_marginEnd="8dp"
+                     android:layout_weight="1"
+                     android:id="@+id/btnSelectDate"
+                     android:text="Select Date" />
+
+                <Button
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:layout_marginStart="8dp"
+                     android:layout_weight="1"
+                     android:id="@+id/btnClearFilter"
+                     android:text="Clear Filter" />
+
+            </LinearLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginTop="8dp"
+                 android:id="@+id/tvSelectedDate"
+                 android:text="All Dates"
+                 android:textStyle="italic" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textfield.TextInputLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:hint="Search by date or amount..."
+             android:id="@+id/etSearch" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="8dp"
+         android:textSize="14sp"
+         android:id="@+id/tvDataCount"
+         android:text="Showing 0 records" />
+
+    <androidx.recyclerview.widget.RecyclerView
+         android:layout_height="0dp"
+         android:layout_width="match_parent"
+         android:layout_weight="1"
+         android:id="@+id/recyclerView" />
+
+    <com.google.android.material.card.MaterialCardView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:elevation="4dp"
+         android:layout_marginTop="16dp"
+         android:id="@+id/cardSummary">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="16dp"
+             android:orientation="vertical">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:textSize="18sp"
+                 android:text="Summary"
+                 android:textStyle="bold" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:orientation="horizontal">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="12sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvTotalLoad"
+                     android:text="Total Load: ₹0" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="12sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvTotalIndent"
+                     android:text="Total Indent: ₹0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:orientation="horizontal">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="12sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvTotal500"
+                     android:text="500 Notes: 0" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="12sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvTotal200"
+                     android:text="200 Notes: 0" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:textSize="12sp"
+                     android:layout_weight="1"
+                     android:id="@+id/tvTotal100"
+                     android:text="100 Notes: 0" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

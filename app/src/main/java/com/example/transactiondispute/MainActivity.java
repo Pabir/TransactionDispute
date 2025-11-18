@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import com.example.transactiondispute.R;
+import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -87,6 +89,7 @@ class Transaction {
 public class MainActivity extends AppCompatActivity {
 
     private Button btnLogout;
+    private Button btnGoToCashManagement;
     
     private Button btnSendEmail; // Add this with other button declarations
     private TextInputEditText etAtmId, etTransDate, etTime, etTransactionId, etUtr, etCustomerName, etDisputeAmount;
@@ -111,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addTransaction();
+            }
+        });
+        
+       btnGoToCashManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToCashManagement();
             }
         });
         
@@ -142,7 +152,19 @@ public class MainActivity extends AppCompatActivity {
                 logout();
             }
         });
+        
+        
+        
+        
     }
+   @Override
+public void onBackPressed() {
+    // Instead of closing the app, go back to MainActivity
+    Intent intent = new Intent(MainActivity.this, CashmanagementActivity.class);
+    startActivity(intent);
+    finish();
+}
+    
     
      private void logout() {
         // Clear login state
@@ -173,12 +195,16 @@ public class MainActivity extends AppCompatActivity {
         btnSendEmail = findViewById(R.id.btnSendEmail);
         
         btnLogout = findViewById(R.id.btnLogout);
-        
+        btnGoToCashManagement = findViewById(R.id.btnGoToCashManagement);
         // Initially disable WhatsApp button
         btnShareWhatsApp.setEnabled(false);
-        
         btnSendEmail.setEnabled(false);
 
+    }
+    
+    private void goToCashManagement() {
+        Intent intent = new Intent(MainActivity.this, CashmanagementActivity.class);
+        startActivity(intent);
     }
 
     private void addTransaction() {

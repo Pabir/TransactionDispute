@@ -1,0 +1,65 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/item_cash_data.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/activity_cashmanagement.xml",
+      "selection": {
+        "end": {
+          "column": 15,
+          "index": 7264,
+          "line": 200
+        },
+        "start": {
+          "column": 15,
+          "index": 7264,
+          "line": 200
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/cashmanagementapp/CashmanagementActivity.java",
+      "selection": {
+        "end": {
+          "column": 1,
+          "index": 18634,
+          "line": 479
+        },
+        "start": {
+          "column": 1,
+          "index": 18634,
+          "line": 479
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/activity_cashmanagement.xml"
+}

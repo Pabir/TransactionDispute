@@ -186,6 +186,16 @@
             android:layout_gravity="end"
             android:layout_marginBottom="16dp"
             android:backgroundTint="#FF5722" />
+        
+    <!-- Add this button after the existing buttons in your LinearLayout -->
+        <Button
+            android:id="@+id/btnGoToCashManagement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Go to Cash Management"
+            android:backgroundTint="#2196F3" />
+        
 
         <TextView
              android:layout_height="wrap_content"
