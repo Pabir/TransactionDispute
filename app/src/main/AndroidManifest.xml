@@ -53,6 +53,9 @@
             android:name=".cashmanagementapp.SummaryActivity"
             android:exported="true"
              />
+        <activity
+            android:name=".LandingActivity"
+            android:exported="false" />
 
         <!-- Data Repository (if you make it a service later) -->
         <!-- <service android:name=".DataRepositoryService" /> -->

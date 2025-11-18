@@ -4,14 +4,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/MainActivity.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 8,
+          "index": 6695,
+          "line": 191
         },
         "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 8,
+          "index": 6695,
+          "line": 191
         }
       }
     },
@@ -59,7 +59,82 @@
           "line": 479
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/LoginActivity.java",
+      "selection": {
+        "end": {
+          "column": 3,
+          "index": 6025,
+          "line": 163
+        },
+        "start": {
+          "column": 3,
+          "index": 6025,
+          "line": 163
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 6,
+          "index": 1936,
+          "line": 55
+        },
+        "start": {
+          "column": 6,
+          "index": 1936,
+          "line": 55
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/activity_landing.xml",
+      "selection": {
+        "end": {
+          "column": 24,
+          "index": 6998,
+          "line": 181
+        },
+        "start": {
+          "column": 24,
+          "index": 6998,
+          "line": 181
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/LandingActivity.java",
+      "selection": {
+        "end": {
+          "column": 39,
+          "index": 39,
+          "line": 0
+        },
+        "start": {
+          "column": 39,
+          "index": 39,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/activity_main.xml",
+      "selection": {
+        "end": {
+          "column": 76,
+          "index": 7524,
+          "line": 189
+        },
+        "start": {
+          "column": 76,
+          "index": 7524,
+          "line": 189
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/res/layout/activity_cashmanagement.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/TransactionDispute/app/src/main/java/com/example/transactiondispute/MainActivity.java"
 }

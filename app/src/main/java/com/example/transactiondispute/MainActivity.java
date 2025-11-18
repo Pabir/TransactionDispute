@@ -89,7 +89,6 @@ class Transaction {
 public class MainActivity extends AppCompatActivity {
 
     private Button btnLogout;
-    private Button btnGoToCashManagement;
     
     private Button btnSendEmail; // Add this with other button declarations
     private TextInputEditText etAtmId, etTransDate, etTime, etTransactionId, etUtr, etCustomerName, etDisputeAmount;
@@ -117,12 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
-       btnGoToCashManagement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToCashManagement();
-            }
-        });
+       
         
         btnExport.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +189,7 @@ public void onBackPressed() {
         btnSendEmail = findViewById(R.id.btnSendEmail);
         
         btnLogout = findViewById(R.id.btnLogout);
-        btnGoToCashManagement = findViewById(R.id.btnGoToCashManagement);
+        
         // Initially disable WhatsApp button
         btnShareWhatsApp.setEnabled(false);
         btnSendEmail.setEnabled(false);

@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
         startActivity(intent);
         finish(); // Close login activity
     }
