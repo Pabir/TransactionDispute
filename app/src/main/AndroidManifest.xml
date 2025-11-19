@@ -56,7 +56,9 @@
         <activity
             android:name=".LandingActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".MailingActivity"
+            android:exported="false" />
         <!-- Data Repository (if you make it a service later) -->
         <!-- <service android:name=".DataRepositoryService" /> -->
         <!-- FileProvider for sharing - exported=false because it's only for internal use -->

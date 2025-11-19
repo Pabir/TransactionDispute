@@ -56,6 +56,12 @@ public class LandingActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
+        // Mailing Button - ADD THIS
+        Button btnMailing = findViewById(R.id.btnMailing);
+        btnMailing.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingActivity.this, MailingActivity.class);
+            startActivity(intent);
+        });
         // Logout Button
         Button btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> logout());
