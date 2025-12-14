@@ -41,6 +41,14 @@
             android:exported="true"
              />
         
+        <activity
+            android:name=".TransactionDisputeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CardTransactionActivity"
+            android:exported="false" />
+        
 
         <!-- Data Entry Activity -->
         <activity

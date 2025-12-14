@@ -1,98 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:fillViewport="true">
+<ScrollView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:fillViewport="true"
+     android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
 
-        <!-- Header -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add/Edit Cash Data"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="24dp"
+             android:gravity="center"
+             android:textSize="24sp"
+             android:text="Add/Edit Cash Data"
+             android:textStyle="bold" />
 
-        <!-- Date Selection -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Date Information"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="Date Information"
+                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btnEntryDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Select Date"
-                    android:textSize="16sp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:textSize="16sp"
+                     android:id="@+id/btnEntryDate"
+                     android:text="Select Date" />
 
                 <TextView
-                    android:id="@+id/tvSelectedEntryDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="No date selected"
-                    android:textStyle="italic"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:gravity="center"
+                     android:layout_marginTop="8dp"
+                     android:id="@+id/tvSelectedEntryDate"
+                     android:text="No date selected"
+                     android:textStyle="italic" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Indent Amount Section -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Indent Information"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="Indent Information"
+                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etIndentAmount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Indent Amount"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="Indent Amount"
+                         android:inputType="number"
+                         android:id="@+id/etIndentAmount" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,117 +98,114 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Load Notes Section -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Load Notes (Sum of)"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="Load Notes (Sum of)"
+                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et500Notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="500 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="500 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/et500Notes" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et200Notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="200 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="200 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/et200Notes" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et100Notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="100 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="100 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/et100Notes" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Auto-calculated Load Amount -->
                 <TextView
-                    android:id="@+id/tvLoadAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Load Amount: ₹0"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:background="#E3F2FD"
-                    android:padding="12dp"
-                    android:layout_marginTop="8dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:background="#E3F2FD"
+                     android:padding="12dp"
+                     android:textSize="14sp"
+                     android:layout_marginTop="8dp"
+                     android:id="@+id/tvLoadAmount"
+                     android:text="Load Amount: ₹0"
+                     android:textStyle="bold" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- EOD Received Section -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="EOD Received From Purge"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="EOD Received From Purge"
+                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etEodReceived"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="EOD Received Amount"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="EOD Received Amount"
+                         android:inputType="number"
+                         android:id="@+id/etEodReceived" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -218,128 +213,124 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- EOD Notes Section -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="EOD Notes Count"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="EOD Notes Count"
+                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etEod500"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="EOD 500 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="EOD 500 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/etEod500" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etEod200"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="EOD 200 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="EOD 200 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/etEod200" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etEod100"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="EOD 100 Rupees Notes"
-                        android:inputType="number" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="EOD 100 Rupees Notes"
+                         android:inputType="number"
+                         android:id="@+id/etEod100" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Auto-calculated EOD Amount -->
                 <TextView
-                    android:id="@+id/tvEodAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="EOD Amount: ₹0"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:background="#E8F5E8"
-                    android:padding="12dp"
-                    android:layout_marginTop="8dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:background="#E8F5E8"
+                     android:padding="12dp"
+                     android:textSize="14sp"
+                     android:layout_marginTop="8dp"
+                     android:id="@+id/tvEodAmount"
+                     android:text="EOD Amount: ₹0"
+                     android:textStyle="bold" />
 
-                <!-- Due EOD Amount -->
                 <TextView
-                    android:id="@+id/tvDueEodAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Due EOD Amount: ₹0"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:background="#FFEBEE"
-                    android:padding="12dp"
-                    android:layout_marginTop="4dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:background="#FFEBEE"
+                     android:padding="12dp"
+                     android:textSize="14sp"
+                     android:layout_marginTop="4dp"
+                     android:id="@+id/tvDueEodAmount"
+                     android:text="Due EOD Amount: ₹0"
+                     android:textStyle="bold" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Loading Time -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:elevation="2dp">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="24dp"
+             android:elevation="2dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:padding="16dp"
+                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Loading Time"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:layout_marginBottom="12dp"
+                     android:textSize="18sp"
+                     android:text="Loading Time"
+                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etLoadingTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="HH:MM:SS (e.g., 14:30:00)"
-                        android:inputType="time" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:hint="HH:MM:SS (e.g., 14:30:00)"
+                         android:inputType="time"
+                         android:id="@+id/etLoadingTime" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -347,32 +338,31 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Action Buttons -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:weightSum="2"
+             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnSave"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save Data"
-                android:textSize="16sp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4CAF50" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="8dp"
+                 android:textSize="16sp"
+                 android:backgroundTint="#4CAF50"
+                 android:layout_weight="1"
+                 android:id="@+id/btnSave"
+                 android:text="Save Data" />
 
             <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:textSize="16sp"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="#F44336" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:textSize="16sp"
+                 android:backgroundTint="#F44336"
+                 android:layout_marginStart="8dp"
+                 android:layout_weight="1"
+                 android:id="@+id/btnCancel"
+                 android:text="Cancel" />
 
         </LinearLayout>
 

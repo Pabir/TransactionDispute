@@ -28,6 +28,15 @@
          android:id="@+id/btnExportExcel"
          android:text="Export to Excel" />
 
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="8dp"
+         android:backgroundTint="#25D366"
+         android:textColor="#FFFFFF"
+         android:id="@+id/btnShareWhatsApp"
+         android:text="Share via WhatsApp" />
+
     <TextView
          android:layout_height="wrap_content"
          android:layout_width="match_parent"

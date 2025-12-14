@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +41,7 @@ import java.util.Locale;
 
 public class CashmanagementActivity extends AppCompatActivity {
     
-    private Button btnExportExcel;
+    private Button btnExportExcel, btnShareWhatsApp;
     private static final int STORAGE_PERMISSION_CODE = 102;
     private File currentExportedFile;
     private RecyclerView recyclerView;
@@ -150,8 +151,9 @@ public class CashmanagementActivity extends AppCompatActivity {
         tvTotal200 = findViewById(R.id.tvTotal200);
         tvTotal100 = findViewById(R.id.tvTotal100);
         
-        // Add this line for the export button
+        // Add these lines for the export and share buttons
         btnExportExcel = findViewById(R.id.btnExportExcel);
+        btnShareWhatsApp = findViewById(R.id.btnShareWhatsApp);
     }
     
     private void setupRecyclerView() {
@@ -213,6 +215,9 @@ public class CashmanagementActivity extends AppCompatActivity {
         
         // Add export button listener
         btnExportExcel.setOnClickListener(v -> exportToExcel());
+        
+        // Add WhatsApp share button listener
+        btnShareWhatsApp.setOnClickListener(v -> shareToWhatsApp());
         
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -432,7 +437,7 @@ public class CashmanagementActivity extends AppCompatActivity {
             
             currentExportedFile = file;
             
-            // Show success message
+            // Show success message with WhatsApp option
             showExportSuccessDialog(file.getAbsolutePath());
             
             Toast.makeText(this, "Data exported successfully to Downloads!", Toast.LENGTH_LONG).show();
@@ -459,9 +464,128 @@ public class CashmanagementActivity extends AppCompatActivity {
     private void showExportSuccessDialog(String filePath) {
         new androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Export Successful")
-            .setMessage("Cash management data has been exported to:\n" + filePath)
-            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+            .setMessage("Cash management data has been exported to:\n" + filePath + 
+                       "\n\nDo you want to share it via WhatsApp?")
+            .setPositiveButton("Share to WhatsApp", (dialog, which) -> {
+                shareToWhatsApp();
+            })
+            .setNegativeButton("Later", (dialog, which) -> dialog.dismiss())
             .show();
+    }
+
+    // WhatsApp Sharing Method
+    private void shareToWhatsApp() {
+        if (currentExportedFile == null || !currentExportedFile.exists()) {
+            Toast.makeText(this, "Please export data first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            // Create content URI using FileProvider
+            Uri fileUri = FileProvider.getUriForFile(
+                    this,
+                    getApplicationContext().getPackageName() + ".provider",
+                    currentExportedFile);
+
+            // Create WhatsApp-specific intent
+            Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+            whatsappIntent.setPackage("com.whatsapp");
+            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            whatsappIntent.setType("text/csv");
+            whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            
+            // Add message with data summary
+            String message = createWhatsAppMessage();
+            whatsappIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+            try {
+                startActivity(whatsappIntent);
+                Toast.makeText(this, "Sharing via WhatsApp...", Toast.LENGTH_SHORT).show();
+            } catch (android.content.ActivityNotFoundException ex) {
+                // WhatsApp not installed, use general share
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.setType("text/csv");
+                shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, createWhatsAppMessage());
+                
+                startActivity(Intent.createChooser(shareIntent, "Share Cash Data"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error sharing file: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            
+            // Fallback: Share just the text content
+            shareTextContentOnly();
+        }
+    }
+
+    private String createWhatsAppMessage() {
+        StringBuilder message = new StringBuilder();
+        
+        message.append("📊 *Cash Management Data Report*\n\n");
+        message.append("*Summary:*\n");
+        message.append("• Total Records: ").append(filteredDataList.size()).append("\n");
+        message.append("• Date Range: ");
+        
+        if (!filteredDataList.isEmpty()) {
+            String firstDate = filteredDataList.get(0).getDate();
+            String lastDate = filteredDataList.get(filteredDataList.size() - 1).getDate();
+            message.append(firstDate).append(" to ").append(lastDate).append("\n");
+        }
+        
+        // Calculate totals
+        int totalLoad = 0, totalIndent = 0, totalEod = 0;
+        for (CashData data : filteredDataList) {
+            totalLoad += data.getSumLoadAmount();
+            totalIndent += data.getIndentAmount();
+            totalEod += data.getSumEodAmount();
+        }
+        
+        message.append("• Total Load Amount: ₹").append(totalLoad).append("\n");
+        message.append("• Total Indent Amount: ₹").append(totalIndent).append("\n");
+        message.append("• Total EOD Amount: ₹").append(totalEod).append("\n\n");
+        
+        message.append("📎 *File Details:*\n");
+        message.append("• File: ").append(currentExportedFile.getName()).append("\n");
+        message.append("• Size: ").append(currentExportedFile.length() / 1024).append(" KB\n");
+        message.append("• Generated: ").append(getCurrentDateTime()).append("\n\n");
+        
+        message.append("_This file contains detailed cash management data for reconciliation._");
+        
+        return message.toString();
+    }
+
+    private String getCurrentDateTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+    private void shareTextContentOnly() {
+        StringBuilder textContent = new StringBuilder();
+        
+        textContent.append("Cash Management Data:\n\n");
+        textContent.append("Total Records: ").append(filteredDataList.size()).append("\n\n");
+        
+        // Add first few records as preview
+        int previewCount = Math.min(3, filteredDataList.size());
+        for (int i = 0; i < previewCount; i++) {
+            CashData data = filteredDataList.get(i);
+            textContent.append("Date: ").append(data.getDate()).append("\n");
+            textContent.append("Load: ₹").append(data.getSumLoadAmount()).append("\n");
+            textContent.append("EOD: ₹").append(data.getSumEodAmount()).append("\n");
+            textContent.append("Due: ₹").append(data.getDueEodAmount()).append("\n\n");
+        }
+        
+        if (filteredDataList.size() > previewCount) {
+            textContent.append("... and ").append(filteredDataList.size() - previewCount).append(" more records.\n");
+        }
+        
+        Intent textShareIntent = new Intent(Intent.ACTION_SEND);
+        textShareIntent.setType("text/plain");
+        textShareIntent.putExtra(Intent.EXTRA_TEXT, textContent.toString());
+        startActivity(Intent.createChooser(textShareIntent, "Share Cash Data Details"));
     }
 
     // Handle permission results

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="Card Transaction Dispute"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- ATM ID -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAtmId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ATM ID" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Card Number -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCardNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Card Number (Last 4 digits)"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Transaction Date -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTransactionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Transaction Date (DD/MM/YYYY)" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Transaction Time -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTransactionTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Time (HH:MM A.M/P.M)" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Transaction ID -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTransactionId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Transaction ID" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Amount -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Amount"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Customer Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer Name" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Bank Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBankName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Bank Name" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Card Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Card Type" />
+
+        <RadioGroup
+            android:id="@+id/rgCardType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbDebitCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Debit Card" />
+
+            <RadioButton
+                android:id="@+id/rbCreditCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Credit Card" />
+
+        </RadioGroup>
+
+        <!-- Issue Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Issue Type" />
+
+        <RadioGroup
+            android:id="@+id/rgIssueType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rbCardSwallowed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Swallowed" />
+
+            <RadioButton
+                android:id="@+id/rbTransactionFailed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transaction Failed" />
+
+            <RadioButton
+                android:id="@+id/rbAmountNotDispensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Amount Not Dispensed" />
+
+            <RadioButton
+                android:id="@+id/rbPinIssue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PIN Issue" />
+
+            <RadioButton
+                android:id="@+id/rbOtherCardIssue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Other Issue" />
+
+        </RadioGroup>
+
+        <!-- Action Buttons -->
+        <Button
+            android:id="@+id/btnAddCardTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Add Card Transaction" />
+
+        <Button
+            android:id="@+id/btnExportCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Export to Excel" />
+
+        <!-- Transactions List -->
+        <TextView
+            android:id="@+id/tvCardTransactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No card transactions added"
+            android:textSize="14sp" />
+
+        <!-- Email Button -->
+        <Button
+            android:id="@+id/btnSendEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#FF9800"
+            android:text="Send Email to Card Support" />
+
+        <!-- Footer -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="Developed by Sk Pabirul Islam"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+</ScrollView>

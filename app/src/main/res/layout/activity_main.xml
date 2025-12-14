@@ -177,18 +177,15 @@
              android:enabled="false"
              android:id="@+id/btnSendEmail"
              android:text="Send Email to Hitachi" />
-            <!-- Add this at the top of your LinearLayout in activity_main.xml -->
+
         <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_gravity="end"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#FF5722" />
-        
-    <!-- Add this button after the existing buttons in your LinearLayout -->
-        
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="16dp"
+             android:backgroundTint="#FF5722"
+             android:id="@+id/btnLogout"
+             android:text="Logout"
+             android:layout_gravity="end" />
 
         <TextView
              android:layout_height="wrap_content"
