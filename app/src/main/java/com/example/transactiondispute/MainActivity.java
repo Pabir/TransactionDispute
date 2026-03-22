@@ -43,19 +43,24 @@ class Transaction {
     private String transactionId;
     private String utr;
     private String customerName;
+    private String customerMobileNumber;
+    private String bankName;
     private String disputeAmount;
     private String transactionType;
 
     public Transaction() {}
 
     public Transaction(String atmId, String transDate, String time, String transactionId, 
-                      String utr, String customerName, String disputeAmount, String transactionType) {
+                      String utr, String customerName, String customerMobileNumber, String bankName, 
+                      String disputeAmount, String transactionType) {
         this.atmId = atmId;
         this.transDate = transDate;
         this.time = time;
         this.transactionId = transactionId;
         this.utr = utr;
         this.customerName = customerName;
+        this.customerMobileNumber = customerMobileNumber;
+        this.bankName = bankName;
         this.disputeAmount = disputeAmount;
         this.transactionType = transactionType;
     }
@@ -79,6 +84,12 @@ class Transaction {
     public String getCustomerName() { return customerName; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
 
+    public String getCustomerMobileNumber() { return customerMobileNumber; }
+    public void setCustomerMobileNumber(String customerMobileNumber) { this.customerMobileNumber = customerMobileNumber; }
+
+    public String getBankName() { return bankName; }
+    public void setBankName(String bankName) { this.bankName = bankName; }
+
     public String getDisputeAmount() { return disputeAmount; }
     public void setDisputeAmount(String disputeAmount) { this.disputeAmount = disputeAmount; }
 
@@ -91,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
     
     private Button btnSendEmail; // Add this with other button declarations
-    private TextInputEditText etAtmId, etTransDate, etTime, etTransactionId, etUtr, etCustomerName, etDisputeAmount;
+    private TextInputEditText etAtmId, etTransDate, etTime, etTransactionId, etUtr, etCustomerName, etCustomerMobileNumber, etBankName, etDisputeAmount;
     private RadioGroup rgTransactionType;
     private Button btnAddTransaction, btnExport, btnShareWhatsApp;
     private TextView tvTransactions;
@@ -180,6 +191,8 @@ public void onBackPressed() {
         etTransactionId = findViewById(R.id.etTransactionId);
         etUtr = findViewById(R.id.etUtr);
         etCustomerName = findViewById(R.id.etCustomerName);
+        etCustomerMobileNumber = findViewById(R.id.etCustomerMobileNumber);
+        etBankName = findViewById(R.id.etBankName);
         etDisputeAmount = findViewById(R.id.etDisputeAmount);
         rgTransactionType = findViewById(R.id.rgTransactionType);
         btnAddTransaction = findViewById(R.id.btnAddTransaction);
@@ -208,6 +221,8 @@ public void onBackPressed() {
         String transactionId = etTransactionId.getText().toString().trim();
         String utr = etUtr.getText().toString().trim();
         String customerName = etCustomerName.getText().toString().trim();
+        String customerMobileNumber = etCustomerMobileNumber.getText().toString().trim();
+        String bankName = etBankName.getText().toString().trim();
         String disputeAmount = etDisputeAmount.getText().toString().trim();
         
         String transactionType = "";
@@ -227,7 +242,7 @@ public void onBackPressed() {
         }
 
         Transaction transaction = new Transaction(atmId, transDate, time, transactionId, 
-                utr, customerName, disputeAmount, transactionType);
+                utr, customerName, customerMobileNumber, bankName, disputeAmount, transactionType);
         
         transactionList.add(transaction);
         updateTransactionsView();
@@ -250,6 +265,7 @@ public void onBackPressed() {
             Transaction t = transactionList.get(i);
             sb.append("Transaction ").append(i + 1).append(":\n")
               .append("ATM ID: ").append(t.getAtmId()).append("\n")
+              .append("Customer: ").append(t.getCustomerName()).append("\n")
               .append("Amount: ").append(t.getDisputeAmount()).append("\n")
               .append("Type: ").append(t.getTransactionType()).append("\n\n");
         }
@@ -265,6 +281,8 @@ public void onBackPressed() {
         etTransactionId.setText("");
         etUtr.setText("");
         etCustomerName.setText("");
+        etCustomerMobileNumber.setText("");
+        etBankName.setText("");
         etDisputeAmount.setText("");
         rgTransactionType.clearCheck();
     }
@@ -421,7 +439,7 @@ public void onBackPressed() {
 
             // Add header row
             csvContent.append(
-                    "ATM ID,Trans Date,Time,Transaction ID,UTR,Customer Name,Dispute Amount,WITHDRAWAL/DEPOSIT\n");
+                    "ATM ID,Trans Date,Time,Transaction ID,UTR,Customer Name,Customer Mobile,Bank Name,Dispute Amount,WITHDRAWAL/DEPOSIT\n");
 
             // Add data rows
             for (Transaction transaction : transactionList) {
@@ -431,6 +449,8 @@ public void onBackPressed() {
                 csvContent.append(csvEscape(transaction.getTransactionId())).append(",");
                 csvContent.append(csvEscape(transaction.getUtr())).append(",");
                 csvContent.append(csvEscape(transaction.getCustomerName())).append(",");
+                csvContent.append(csvEscape(transaction.getCustomerMobileNumber())).append(",");
+                csvContent.append(csvEscape(transaction.getBankName())).append(",");
                 csvContent.append(csvEscape(transaction.getDisputeAmount())).append(",");
                 csvContent.append(csvEscape(transaction.getTransactionType())).append("\n");
             }
@@ -570,6 +590,8 @@ public void onBackPressed() {
             textContent.append("Transaction ID: ").append(t.getTransactionId()).append("\n");
             textContent.append("UTR: ").append(t.getUtr()).append("\n");
             textContent.append("Customer: ").append(t.getCustomerName()).append("\n");
+            textContent.append("Mobile: ").append(t.getCustomerMobileNumber()).append("\n");
+            textContent.append("Bank: ").append(t.getBankName()).append("\n");
             textContent.append("Amount: ").append(t.getDisputeAmount()).append("\n");
             textContent.append("Type: ").append(t.getTransactionType()).append("\n\n");
         }
@@ -585,16 +607,6 @@ public void onBackPressed() {
         content.append("Dear Sir/Madam,\n\n");
         content.append("I am writing to report unsuccessful UPI withdrawal and deposit transactions that occurred at your ATM. Despite the transactions failing, the amounts were debited from / not credited to the customers' bank accounts.\n\n");
         content.append("Please find the attached Excel file containing the transaction details for your investigation.\n\n");
-        
-        double totalAmount = 0;
-        for (Transaction t : transactionList) {
-            try {
-                totalAmount += Double.parseDouble(t.getDisputeAmount());
-            } catch (NumberFormatException e) {
-                // Ignore parsing errors
-            }
-        }
-        
         
         return content.toString();
     }
@@ -649,6 +661,10 @@ public void onBackPressed() {
     }
 
     private String getEmailSubject() {
+        if (transactionList != null && !transactionList.isEmpty()) {
+            Transaction first = transactionList.get(0);
+            return "Transaction Dispute - " + first.getAtmId() + " - ₹" + first.getDisputeAmount();
+        }
         return "Transaction Dispute - "
                 + transactionList.size()
                 + " Failed UPI Transactions - "
@@ -667,23 +683,6 @@ public void onBackPressed() {
 
     content.append("TRANSACTION SUMMARY:\n");
 
-    double totalAmount = 0;
-    int withdrawalCount = 0;
-    int depositCount = 0;
-
-    for (Transaction t : transactionList) {
-        try {
-            totalAmount += Double.parseDouble(t.getDisputeAmount());
-        } catch (NumberFormatException e) {
-            // Ignore parsing errors
-        }
-        if ("WITHDRAWAL".equals(t.getTransactionType())) {
-            withdrawalCount++;
-        } else {
-            depositCount++;
-        }
-    }
-
     // Add transaction details as bullet points
     content.append("TRANSACTION DETAILS:\n");
     for (int i = 0; i < transactionList.size(); i++) {
@@ -695,6 +694,8 @@ public void onBackPressed() {
         content.append("  • Transaction ID: ").append(t.getTransactionId()).append("\n");
         content.append("  • UTR: ").append(t.getUtr()).append("\n");
         content.append("  • Customer Name: ").append(t.getCustomerName()).append("\n");
+        content.append("  • Customer Mobile: ").append(t.getCustomerMobileNumber()).append("\n");
+        content.append("  • Bank Name: ").append(t.getBankName()).append("\n");
         content.append("  • Amount: ₹").append(t.getDisputeAmount()).append("\n");
         content.append("  • Type: ").append(t.getTransactionType()).append("\n");
     }

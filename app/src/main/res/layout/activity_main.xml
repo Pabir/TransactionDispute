@@ -105,6 +105,33 @@
             <com.google.android.material.textfield.TextInputEditText
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
+                 android:hint="Customer Mobile Number"
+                 android:inputType="phone"
+                 android:id="@+id/etCustomerMobileNumber" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:hint="Bank Name"
+                 android:id="@+id/etBankName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
                  android:hint="Dispute Amount"
                  android:inputType="number"
                  android:id="@+id/etDisputeAmount" />

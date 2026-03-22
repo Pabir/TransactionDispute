@@ -97,8 +97,8 @@ public class MailingActivity extends AppCompatActivity {
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("message/rfc822");
 
-            String[] to = {"WLASupport@hitachi-payments.com"};
-            String[] cc = {"dibyendu.majumder@hitachi-payments.com", "jagdish.panchal@hitachi-payments.com", "mf.techeasyservices@gmail.com"};
+            String[] to = {"mf.teacheasyservices.com"};
+            String[] cc = {"dibyendu.majumder@hitachi-payments.com", "jagdish.panchal@hitachi-payments.com"};
 
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
             emailIntent.putExtra(Intent.EXTRA_CC, cc);

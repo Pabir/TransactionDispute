@@ -5,11 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,8 +18,8 @@ import java.util.Locale;
 
 public class CardTransactionActivity extends AppCompatActivity {
 
-    private EditText etAtmId, etCardNumber, etTransactionDate, etTransactionTime;
-    private EditText etTransactionId, etAmount, etCustomerName, etBankName;
+    private TextInputEditText etAtmId, etCardNumber, etTransactionDate, etTransactionTime;
+    private TextInputEditText etTransactionId, etAmount, etCustomerName, etCustomerMobileNumber, etBankName;
     private RadioGroup rgCardType, rgIssueType;
     private Button btnAddCardTransaction, btnExportCard, btnSendEmail;
     private TextView tvCardTransactions;
@@ -45,6 +45,7 @@ public class CardTransactionActivity extends AppCompatActivity {
         etTransactionId = findViewById(R.id.etTransactionId);
         etAmount = findViewById(R.id.etAmount);
         etCustomerName = findViewById(R.id.etCustomerName);
+        etCustomerMobileNumber = findViewById(R.id.etCustomerMobileNumber);
         etBankName = findViewById(R.id.etBankName);
         
         rgCardType = findViewById(R.id.rgCardType);
@@ -71,6 +72,7 @@ public class CardTransactionActivity extends AppCompatActivity {
         String transactionId = etTransactionId.getText().toString().trim();
         String amount = etAmount.getText().toString().trim();
         String customerName = etCustomerName.getText().toString().trim();
+        String customerMobileNumber = etCustomerMobileNumber.getText().toString().trim();
         String bankName = etBankName.getText().toString().trim();
         
         String cardType = "";
@@ -104,7 +106,7 @@ public class CardTransactionActivity extends AppCompatActivity {
         }
 
         CardTransaction transaction = new CardTransaction(atmId, cardNumber, transactionDate, 
-                transactionTime, transactionId, amount, customerName, bankName, cardType, issueType);
+                transactionTime, transactionId, amount, customerName, customerMobileNumber, bankName, cardType, issueType);
         
         cardTransactionList.add(transaction);
         updateCardTransactionsView();
@@ -125,6 +127,7 @@ public class CardTransactionActivity extends AppCompatActivity {
             CardTransaction t = cardTransactionList.get(i);
             sb.append("Transaction ").append(i + 1).append(":\n")
               .append("ATM ID: ").append(t.atmId).append("\n")
+              .append("Customer: ").append(t.customerName).append("\n")
               .append("Card: ").append(t.cardType).append("\n")
               .append("Amount: ").append(t.amount).append("\n")
               .append("Issue: ").append(t.issueType).append("\n\n");
@@ -140,6 +143,7 @@ public class CardTransactionActivity extends AppCompatActivity {
         etTransactionId.setText("");
         etAmount.setText("");
         etCustomerName.setText("");
+        etCustomerMobileNumber.setText("");
         etBankName.setText("");
         rgCardType.clearCheck();
         rgIssueType.clearCheck();
@@ -160,12 +164,16 @@ public class CardTransactionActivity extends AppCompatActivity {
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("message/rfc822");
             
-            String[] to = {"carddisputes@hitachi-payments.com", "support@hitachi-payments.com"};
-            String[] cc = {"operations@hitachi-payments.com"};
+            String[] to = {"WLASupport@hitachi-payments.com"};
+            String[] cc = {"mf.teacheasyservices.com", "dibyendu.majumder@hitachi-payments.com"};
             
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
             emailIntent.putExtra(Intent.EXTRA_CC, cc);
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Card Transaction Dispute - " + getCurrentDate());
+            
+            // Updated subject as requested: ATM ID & Dispute Amount
+            String subject = "Card Transaction Dispute - " + cardTransactionList.get(0).atmId + " - ₹" + cardTransactionList.get(0).amount;
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            
             emailIntent.putExtra(Intent.EXTRA_TEXT, createCardTransactionEmailContent());
             
             startActivity(Intent.createChooser(emailIntent, "Send Card Transaction Dispute..."));
@@ -221,6 +229,8 @@ public class CardTransactionActivity extends AppCompatActivity {
             CardTransaction t = cardTransactionList.get(i);
             content.append("\nTransaction ").append(i + 1).append(":\n");
             content.append("  • ATM ID: ").append(t.atmId).append("\n");
+            content.append("  • Customer Name: ").append(t.customerName).append("\n");
+            content.append("  • Customer Mobile: ").append(t.customerMobileNumber).append("\n");
             content.append("  • Card Type: ").append(t.cardType).append("\n");
             content.append("  • Amount: ₹").append(t.amount).append("\n");
             content.append("  • Issue: ").append(t.issueType).append("\n");
@@ -244,13 +254,15 @@ public class CardTransactionActivity extends AppCompatActivity {
         String transactionId;
         String amount;
         String customerName;
+        String customerMobileNumber;
         String bankName;
         String cardType;
         String issueType;
         
         public CardTransaction(String atmId, String cardNumber, String transactionDate, 
                              String transactionTime, String transactionId, String amount,
-                             String customerName, String bankName, String cardType, String issueType) {
+                             String customerName, String customerMobileNumber, String bankName, 
+                             String cardType, String issueType) {
             this.atmId = atmId;
             this.cardNumber = cardNumber;
             this.transactionDate = transactionDate;
@@ -258,6 +270,7 @@ public class CardTransactionActivity extends AppCompatActivity {
             this.transactionId = transactionId;
             this.amount = amount;
             this.customerName = customerName;
+            this.customerMobileNumber = customerMobileNumber;
             this.bankName = bankName;
             this.cardType = cardType;
             this.issueType = issueType;

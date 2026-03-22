@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
             String currentDate = new SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(new Date());
             
             // Create the base string: currentDate + Pabirul + 2025
-            String baseString = currentDate + "Pabirul" + "2025";
+            String baseString = currentDate + "Pabirul" + "2026";
             
             // Generate MD5 hash
             MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
     private String generateFallbackPasscode() {
         // Simple fallback method if MD5 fails
         String currentDate = new SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(new Date());
-        String baseString = currentDate + "Pabirul" + "2025";
+        String baseString = currentDate + "Pabirul" + "2026";
         // Create a longer fallback hash
         String hash = String.valueOf(Math.abs(baseString.hashCode()));
         // Pad or truncate to 30 characters
