@@ -5,190 +5,226 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.example.transactiondispute.R;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.transactiondispute.api.SupabaseService;
 import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
+import com.example.transactiondispute.models.AuthModels;
 import com.example.transactiondispute.notecounter.NoteCounterActivity;
+import com.google.android.material.textfield.TextInputEditText;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etPasscode;
-    private Button btnNoteCounter;
+    private TextInputEditText etFranchiseeId, etPassword, etPasscode;
     private Button btnLogin;
     private TextView tvError;
-    private Button btnReport;
+    private ProgressBar progressBar;
+    private SupabaseService supabaseService;
+    
     private static final String PREFS_NAME = "AppPrefs";
-    private static final String LAST_LOGIN_DATE = "last_login_date";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        initRetrofit();
         initializeViews();
         
-        // Check if user is already logged in (same day)
-        if (isUserLoggedIn() && !isNewDay()) {
-            startMainActivity();
+        if (isUserLoggedIn()) {
+            startLandingActivity();
             return;
         }
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validatePasscode();
-            }
-        });
+        btnLogin.setOnClickListener(v -> performLogin());
 
-        // Add in your MainActivity
-        Button btnNoteCounter = findViewById(R.id.btnNoteCounter); // You'll need to add this in XML
-        btnNoteCounter.setOnClickListener(
-                v -> {
-                    Intent intent = new Intent(LoginActivity.this, NoteCounterActivity.class);
-                    startActivity(intent);
-                });
-               Button btnReport = findViewById(R.id.btnReport); // You'll need to add this in XML
-        btnReport.setOnClickListener(
-                v -> {
-                    Intent intent = new Intent(LoginActivity.this, CashmanagementActivity.class);
-                    startActivity(intent);
-                });
+        findViewById(R.id.btnNoteCounter).setOnClickListener(v -> {
+            startActivity(new Intent(this, NoteCounterActivity.class));
+        });
+        
+        findViewById(R.id.btnReport).setOnClickListener(v -> {
+            startActivity(new Intent(this, CashmanagementActivity.class));
+        });
+    }
+
+    private void initRetrofit() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder()
+                            .addHeader("apikey", SupabaseConfig.ANON_KEY)
+                            .build();
+                    return chain.proceed(request);
+                })
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(SupabaseConfig.URL + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
+        supabaseService = retrofit.create(SupabaseService.class);
     }
 
     private void initializeViews() {
+        etFranchiseeId = findViewById(R.id.etFranchiseeId);
+        etPassword = findViewById(R.id.etPassword);
         etPasscode = findViewById(R.id.etPasscode);
         btnLogin = findViewById(R.id.btnLogin);
         tvError = findViewById(R.id.tvError);
+        progressBar = findViewById(R.id.loginProgress);
     }
 
-    private void validatePasscode() {
-        String enteredPasscode = etPasscode.getText().toString().trim();
-        
-        if (enteredPasscode.isEmpty()) {
-            showError("Please enter passcode");
+    private void performLogin() {
+        String inputId = etFranchiseeId.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String passcode = etPasscode.getText().toString().trim();
+
+        if (inputId.isEmpty() || password.isEmpty() || passcode.isEmpty()) {
+            showError("Please enter ID, Password and Passcode");
             return;
         }
 
-        // Get today's dynamic passcode using full MD5 hash (30 characters)
-        String todayPasscode = generateDailyPasscode();
-        
-        if (enteredPasscode.equals(todayPasscode)) {
-            // Save login state and date
-            saveLoginState();
-            startMainActivity();
-        } else {
-            showError("Invalid passcode. Please try again.");
-            etPasscode.setText("");
+        // Validate MD5 Passcode (Dynamic based on current date)
+        if (!validatePasscode(passcode)) {
+            showError("Invalid MD5 Passcode");
+            return;
         }
+
+        String email = inputId.contains("@") ? inputId : 
+                      (inputId.equalsIgnoreCase("admin") ? "admin@yourdomain.com" : inputId + "@franchisee.com");
+
+        progressBar.setVisibility(View.VISIBLE);
+        btnLogin.setEnabled(false);
+        tvError.setVisibility(View.GONE);
+
+        supabaseService.login(new AuthModels.LoginRequest(email, password))
+                .enqueue(new Callback<AuthModels.AuthResponse>() {
+            @Override
+            public void onResponse(Call<AuthModels.AuthResponse> call, Response<AuthModels.AuthResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    fetchProfile(response.body());
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    btnLogin.setEnabled(true);
+                    showError("Login failed: Invalid ID or password");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AuthModels.AuthResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                btnLogin.setEnabled(true);
+                showError("Network error: " + t.getMessage());
+            }
+        });
     }
 
-    private String generateDailyPasscode() {
+    private boolean validatePasscode(String input) {
+        if (input == null || input.isEmpty()) return false;
+
+        // 1. Get current date in DDMMYYYY format
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
+        String currentDate = sdf.format(new Date());
+        
+        // 2. Construct the daily string
+        String dailyString = currentDate + "Pabirul2026";
+        
+        // 3. Calculate expected MD5 hash
+        String expectedHash = md5(dailyString);
+
+        // 4. Compare input with the expected daily hash
+        return input.equalsIgnoreCase(expectedHash);
+    }
+
+    private String md5(String s) {
         try {
-            // Get current date in required format: ddMMyyyy
-            String currentDate = new SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(new Date());
-            
-            // Create the base string: currentDate + Pabirul + 2025
-            String baseString = currentDate + "Pabirul" + "2026";
-            
-            // Generate MD5 hash
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(baseString.getBytes());
-            byte[] messageDigest = digest.digest();
-            
-            // Convert byte array to hex string
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
             StringBuilder hexString = new StringBuilder();
-            for (byte b : messageDigest) {
-                String hex = Integer.toHexString(0xFF & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2) h = "0" + h;
+                hexString.append(h);
             }
-            
-            // Take first 30 characters for the passcode (MD5 is 32 chars, we take 30)
-            return hexString.toString().substring(0, 30);
-            
+            return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            // Fallback method if MD5 fails
-            return generateFallbackPasscode();
         }
+        return "";
     }
 
-    private String generateFallbackPasscode() {
-        // Simple fallback method if MD5 fails
-        String currentDate = new SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(new Date());
-        String baseString = currentDate + "Pabirul" + "2026";
-        // Create a longer fallback hash
-        String hash = String.valueOf(Math.abs(baseString.hashCode()));
-        // Pad or truncate to 30 characters
-        while (hash.length() < 30) {
-            hash += hash; // Repeat if too short
-        }
-        return hash.substring(0, 30);
+    private void fetchProfile(AuthModels.AuthResponse auth) {
+        String authHeader = "Bearer " + auth.accessToken;
+        String queryId = "eq." + auth.user.id;
+        
+        supabaseService.getProfile(authHeader, "0-0", queryId).enqueue(new Callback<List<AuthModels.Profile>>() {
+            @Override
+            public void onResponse(Call<List<AuthModels.Profile>> call, Response<List<AuthModels.Profile>> response) {
+                progressBar.setVisibility(View.GONE);
+                btnLogin.setEnabled(true);
+
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    AuthModels.Profile profile = response.body().get(0);
+                    saveUserSession(auth.accessToken, profile);
+                    startLandingActivity();
+                } else {
+                    showError("Profile record not found in database.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AuthModels.Profile>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                btnLogin.setEnabled(true);
+                showError("Failed to fetch user profile data.");
+            }
+        });
     }
 
-    private void saveLoginState() {
+    private void saveUserSession(String token, AuthModels.Profile profile) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("isLoggedIn", true);
-        
-        // Save today's date to check for new day
-        String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-        editor.putString(LAST_LOGIN_DATE, today);
-        
+        editor.putString("access_token", token);
+        editor.putString("user_id", profile.id);
+        editor.putString("franchisee_id", profile.franchiseeId);
+        editor.putString("user_role", profile.role);
         editor.apply();
     }
 
     private boolean isUserLoggedIn() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getBoolean("isLoggedIn", false);
+        return getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getBoolean("isLoggedIn", false);
     }
 
-    private boolean isNewDay() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String lastLoginDate = prefs.getString(LAST_LOGIN_DATE, "");
-        String today = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-        
-        return !lastLoginDate.equals(today);
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-        startActivity(intent);
-        finish(); // Close login activity
+    private void startLandingActivity() {
+        startActivity(new Intent(this, LandingActivity.class));
+        finish();
     }
 
     private void showError(String message) {
         tvError.setText(message);
         tvError.setVisibility(View.VISIBLE);
-    }
-
-    // Method to get today's passcode (for you to share with users)
-    public String getTodaysPasscode() {
-        return generateDailyPasscode();
-    }
-
-    // Temporary method to display today's passcode (remove after testing)
-    private void showTodaysPasscode() {
-        String todayPasscode = generateDailyPasscode();
-        String currentDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
-        
-        Toast.makeText(this, 
-            "Today's Passcode (30 chars): " + todayPasscode, 
-            Toast.LENGTH_LONG).show();
-        
-        // Also log to console for easy copying
-        System.out.println("Date: " + currentDate);
-        System.out.println("Passcode: " + todayPasscode);
-        System.out.println("Passcode Length: " + todayPasscode.length());
     }
 }

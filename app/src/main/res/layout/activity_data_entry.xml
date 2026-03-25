@@ -20,6 +20,14 @@
              android:text="Add/Edit Cash Data"
              android:textStyle="bold" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
+
         <com.google.android.material.card.MaterialCardView
              android:layout_height="wrap_content"
              android:layout_width="match_parent"

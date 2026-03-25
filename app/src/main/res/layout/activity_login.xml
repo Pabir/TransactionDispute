@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
      xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="match_parent"
      android:layout_width="match_parent"
      android:gravity="center"
@@ -17,27 +18,52 @@
          android:text="Transaction Dispute App"
          android:textStyle="bold" />
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:layout_marginBottom="16dp"
-         android:textSize="18sp"
-         android:textColor="#333333"
-         android:text="Enter Passcode" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etFranchiseeId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Franchisee ID (e.g. MCRM2987)"
+            android:inputType="text"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:passwordToggleEnabled="true"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        app:passwordToggleEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPasscode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter 30-character daily passcode"
+            android:hint="MD5 Hash Passcode"
             android:inputType="textPassword"
-            android:maxLength="30"
             android:textSize="16sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -50,7 +76,7 @@
          android:textSize="14sp"
          android:textColor="#FF0000"
          android:id="@+id/tvError"
-         android:text="Invalid passcode" />
+         android:text="Invalid credentials" />
 
     <Button
          android:layout_height="wrap_content"
@@ -61,29 +87,36 @@
          android:id="@+id/btnLogin"
          android:text="Login" />
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:textSize="12sp"
-         android:textColor="#666666"
-         android:layout_marginTop="20dp"
-         android:text="Default passcode: 1234" />
-
-    <Button
+    <ProgressBar
+        android:id="@+id/loginProgress"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:backgroundTint="#2196F3"
-        android:textColor="#FFFFFF"
-        android:id="@+id/btnNoteCounter"
-        android:text="Note Counter" />
-    <Button
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp">
+
+        <Button
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="14sp"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:id="@+id/btnNoteCounter"
+            android:text="Note Counter" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="14sp"
             android:backgroundTint="#2196F3"
             android:textColor="#FFFFFF"
             android:id="@+id/btnReport"
             android:text="Daily Report" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -122,11 +122,24 @@
          android:id="@+id/tvDataCount"
          android:text="Showing 0 records" />
 
-    <androidx.recyclerview.widget.RecyclerView
-         android:layout_height="0dp"
-         android:layout_width="match_parent"
-         android:layout_weight="1"
-         android:id="@+id/recyclerView" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:id="@+id/recyclerView" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <com.google.android.material.card.MaterialCardView
          android:layout_height="wrap_content"
