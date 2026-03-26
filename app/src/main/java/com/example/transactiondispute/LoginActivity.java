@@ -111,8 +111,9 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // Updated domain to techeasyservices.com as per requirement
         String email = inputId.contains("@") ? inputId : 
-                      (inputId.equalsIgnoreCase("admin") ? "admin@yourdomain.com" : inputId + "@franchisee.com");
+                      (inputId.equalsIgnoreCase("admin") ? "admin@techeasyservices.com" : inputId + "@techeasyservices.com");
 
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
@@ -152,8 +153,13 @@ public class LoginActivity extends AppCompatActivity {
         
         // 3. Calculate expected MD5 hash
         String expectedHash = md5(dailyString);
+        
+        // 4. Truncate 2 characters from the end as per requirement
+        if (expectedHash.length() > 2) {
+            expectedHash = expectedHash.substring(0, expectedHash.length() - 2);
+        }
 
-        // 4. Compare input with the expected daily hash
+        // 5. Compare input with the expected daily hash
         return input.equalsIgnoreCase(expectedHash);
     }
 

@@ -41,33 +41,33 @@
              android:radius="8dp">
 
             <LinearLayout
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:background="#E8F5E8"
-                 android:padding="16dp"
-                 android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E8F5E8"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:layout_marginBottom="8dp"
-                     android:textSize="18sp"
-                     android:text="📋 EOD Docket Request"
-                     android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="📋 EOD Docket Request"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:layout_marginBottom="12dp"
-                     android:textSize="12sp"
-                     android:text="Request EOD docket for cash reconciliation and daily settlement" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="Request EOD docket for cash reconciliation and daily settlement"
+                    android:textSize="12sp" />
 
                 <Button
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:backgroundTint="#4CAF50"
-                     android:id="@+id/btnEodDocketRequest"
-                     android:text="Request EOD Docket" />
+                    android:id="@+id/btnEodDocketRequest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#4CAF50"
+                    android:text="Request EOD Docket" />
 
             </LinearLayout>
 

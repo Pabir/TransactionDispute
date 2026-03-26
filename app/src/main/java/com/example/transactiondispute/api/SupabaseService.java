@@ -43,6 +43,13 @@ public interface SupabaseService {
         @Header("Authorization") String authHeader,
         @Query("select") String select
     );
+    
+    @GET("rest/v1/cash_management")
+    Call<List<Map<String, Object>>> getFilteredCashData(
+        @Header("Authorization") String authHeader,
+        @Query("select") String select,
+        @Query("franchisee_id") String franchiseeFilter
+    );
 
     @Headers({
         "Content-Type: application/json",

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="ATM Loading Details"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAtmId"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="4dp"
+        android:textSize="18sp"
+        android:text="ATM ID: "
+        android:textColor="#3F51B5" />
+
+    <TextView
+        android:id="@+id/tvStats"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="4dp"
+        android:textSize="14sp"
+        android:text="Total Records: 0 | Total Load: ₹0" />
+
+    <TextView
+        android:id="@+id/tvTotalCarryForward"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="12dp"
+        android:textSize="14sp"
+        android:text="Total Carry Forward: ₹0"
+        android:textColor="#D32F2F"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSingleAtm"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/pbSingleAtm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

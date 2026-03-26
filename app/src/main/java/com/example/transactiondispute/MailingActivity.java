@@ -57,7 +57,7 @@ public class MailingActivity extends AppCompatActivity {
     private void setupEventListeners() {
         btnMachineIssues.setOnClickListener(v -> showMachineIssueDialog());
         btnEodDocketRequest.setOnClickListener(v -> showAtmIdDialogForEod());
-        btnTransactionDisputes.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        btnTransactionDisputes.setOnClickListener(v -> startActivity(new Intent(this, TransactionDisputeActivity.class)));
         btnCashManagement.setOnClickListener(v -> startActivity(new Intent(this, CashmanagementActivity.class)));
         btnOpenGmail.setOnClickListener(v -> openGmailApp());
     }

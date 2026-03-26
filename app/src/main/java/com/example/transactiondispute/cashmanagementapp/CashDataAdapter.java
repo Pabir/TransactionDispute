@@ -13,7 +13,6 @@ public class CashDataAdapter extends RecyclerView.Adapter<CashDataAdapter.ViewHo
     private List<CashData> cashDataList;
     private OnItemClickListener onItemClickListener;
 
-    // Interface for click events
     public interface OnItemClickListener {
         void onItemClick(int position);
         void onItemLongClick(int position);
@@ -51,20 +50,25 @@ public class CashDataAdapter extends RecyclerView.Adapter<CashDataAdapter.ViewHo
         holder.tvLoadingTime.setText("Load Time: " + data.getLoadingTime());
         holder.tvLoadAmount.setText("Load Amount: ₹" + data.getSumLoadAmount());
         holder.tvEodAmount.setText("EOD Amount: ₹" + data.getSumEodAmount());
-        holder.tvDueAmount.setText("Due EOD: ₹" + data.getDueEodAmount());
+        
+        // Due Amount from Layout (Original)
+        holder.tvDueAmount.setText("Diff: ₹" + (data.getSumLoadAmount() - data.getIndentAmount()));
+        
+        // Shortfall Tracking Fields
+        holder.tvShortLoad.setText("Short Load: ₹" + data.getShortLoadAmount());
+        holder.tvDueEod.setText("Due EOD: ₹" + data.getDueEodAmount());
+        holder.tvCarryForward.setText("Carry Fwd: ₹" + data.getCarryForwardAmount());
 
-        // Set click listeners
+        // Set text colors based on shortfalls
+        int red = 0xFFD32F2F;
+        int green = 0xFF4CAF50;
+
+        holder.tvShortLoad.setTextColor(data.getShortLoadAmount() > 0 ? red : green);
+        holder.tvDueEod.setTextColor(data.getDueEodAmount() > 0 ? red : green);
+        holder.tvCarryForward.setTextColor(data.getCarryForwardAmount() > 0 ? red : green);
+
         holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(position);
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemLongClick(position);
-            }
-            return true;
+            if (onItemClickListener != null) onItemClickListener.onItemClick(position);
         });
     }
 
@@ -82,10 +86,10 @@ public class CashDataAdapter extends RecyclerView.Adapter<CashDataAdapter.ViewHo
         TextView tvDate, tvIndentAmount, tv500Notes, tv200Notes, tv100Notes;
         TextView tvEodReceived, tvEod500, tvEod200, tvEod100, tvLoadingTime;
         TextView tvLoadAmount, tvEodAmount, tvDueAmount;
+        TextView tvShortLoad, tvDueEod, tvCarryForward;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            
             tvDate = itemView.findViewById(R.id.tvDate);
             tvIndentAmount = itemView.findViewById(R.id.tvIndentAmount);
             tv500Notes = itemView.findViewById(R.id.tv500Notes);
@@ -99,6 +103,9 @@ public class CashDataAdapter extends RecyclerView.Adapter<CashDataAdapter.ViewHo
             tvLoadAmount = itemView.findViewById(R.id.tvLoadAmount);
             tvEodAmount = itemView.findViewById(R.id.tvEodAmount);
             tvDueAmount = itemView.findViewById(R.id.tvDueAmount);
+            tvShortLoad = itemView.findViewById(R.id.tvShortLoad);
+            tvDueEod = itemView.findViewById(R.id.tvDueEod);
+            tvCarryForward = itemView.findViewById(R.id.tvCarryForward);
         }
     }
 }

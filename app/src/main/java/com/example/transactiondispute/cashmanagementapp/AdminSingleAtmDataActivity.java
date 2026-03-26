@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,36 +25,36 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CashmanagementActivity extends AppCompatActivity {
-    
+public class AdminSingleAtmDataActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private CashDataAdapter adapter;
-    private List<CashData> dataList;
     private SupabaseService supabaseService;
-    private String accessToken, userRole;
     private ProgressBar progressBar;
-    private TextView tvSummary;
-    private String filterAtmId;
+    private TextView tvTitle, tvAtmId, tvStats, tvTotalCarryForward;
+    private String accessToken, atmId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        filterAtmId = getIntent().getStringExtra("FILTER_ATM_ID");
-        
+        setContentView(R.layout.activity_admin_single_atm_data);
+
+        atmId = getIntent().getStringExtra("FILTER_ATM_ID");
+        if (atmId == null) {
+            Toast.makeText(this, "No ATM ID provided", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         loadSession();
         initRetrofit();
-        setContentView(R.layout.activity_cashmanagement);
-        
         initializeViews();
-        setupRecyclerView();
-        loadDataFromCloud();
+        loadAtmData();
     }
 
     private void loadSession() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         accessToken = prefs.getString("access_token", "");
-        userRole = prefs.getString("user_role", "");
         if (accessToken.isEmpty()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -81,39 +80,51 @@ public class CashmanagementActivity extends AppCompatActivity {
         supabaseService = retrofit.create(SupabaseService.class);
     }
 
-    private void loadDataFromCloud() {
+    private void initializeViews() {
+        tvAtmId = findViewById(R.id.tvAtmId);
+        tvStats = findViewById(R.id.tvStats);
+        tvTotalCarryForward = findViewById(R.id.tvTotalCarryForward);
+        progressBar = findViewById(R.id.pbSingleAtm);
+        recyclerView = findViewById(R.id.rvSingleAtm);
+        
+        tvAtmId.setText("ATM ID: " + atmId);
+        
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CashDataAdapter(new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void loadAtmData() {
         progressBar.setVisibility(View.VISIBLE);
         String authHeader = "Bearer " + accessToken;
         
-        String query = "*";
-        if (filterAtmId != null && !filterAtmId.isEmpty()) {
-            query = "franchisee_id.eq." + filterAtmId;
-        }
-
-        supabaseService.getCashData(authHeader, query).enqueue(new Callback<List<Map<String, Object>>>() {
+        // Use filtering for specific ATM
+        String query = "eq." + atmId;
+        supabaseService.getFilteredCashData(authHeader, "*", query).enqueue(new Callback<List<Map<String, Object>>>() {
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
-                    processCloudData(response.body());
+                    processData(response.body());
                 } else {
-                    Toast.makeText(CashmanagementActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminSingleAtmDataActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(CashmanagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminSingleAtmDataActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void processCloudData(List<Map<String, Object>> cloudData) {
-        dataList = new ArrayList<>();
-        int totalLoad = 0;
+    private void processData(List<Map<String, Object>> rawData) {
+        List<CashData> dataList = new ArrayList<>();
+        long totalLoad = 0;
+        long totalCarryForward = 0;
         
-        for (Map<String, Object> map : cloudData) {
+        for (Map<String, Object> map : rawData) {
             try {
                 CashData data = new CashData(
                     (String) map.get("entry_date"),
@@ -129,43 +140,12 @@ public class CashmanagementActivity extends AppCompatActivity {
                 );
                 dataList.add(data);
                 totalLoad += data.getSumLoadAmount();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                totalCarryForward += data.getCarryForwardAmount();
+            } catch (Exception e) { e.printStackTrace(); }
         }
         
         adapter.updateData(dataList);
-        
-        String summary = "Total Load: ₹" + totalLoad + " | Records: " + dataList.size();
-        if (filterAtmId != null) {
-            summary = "ATM: " + filterAtmId + " | " + summary;
-        }
-        tvSummary.setText(summary);
-        
-        if (userRole.equals("admin") && filterAtmId == null) {
-            tvSummary.append("\n(Logged in as Admin)");
-        }
-    }
-
-    private void initializeViews() {
-        recyclerView = findViewById(R.id.recyclerView);
-        progressBar = findViewById(R.id.progressBar);
-        tvSummary = findViewById(R.id.tvDataCount); // Reusing existing ID
-        
-        findViewById(R.id.btngotoDataEntry).setOnClickListener(v -> {
-            startActivityForResult(new Intent(this, DataEntryActivity.class), 1001);
-        });
-    }
-
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CashDataAdapter(new ArrayList<>());
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) loadDataFromCloud();
+        tvStats.setText("Total Records: " + dataList.size() + " | Total Load: ₹" + totalLoad);
+        tvTotalCarryForward.setText("Total Carry Forward: ₹" + totalCarryForward);
     }
 }

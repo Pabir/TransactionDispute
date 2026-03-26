@@ -72,6 +72,15 @@
             android:name=".MailingActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".cashmanagementapp.AdminCashDataActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".cashmanagementapp.AdminSingleAtmDataActivity"
+            android:label="ATM Details"
+            android:exported="false" />
+
         <!-- FileProvider for sharing -->
         <provider
             android:name="androidx.core.content.FileProvider"

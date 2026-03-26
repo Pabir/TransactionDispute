@@ -62,7 +62,7 @@
             android:id="@+id/etPasscode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="MD5 Hash Passcode"
+            android:hint="Enter Passcode"
             android:inputType="textPassword"
             android:textSize="16sp" />
 

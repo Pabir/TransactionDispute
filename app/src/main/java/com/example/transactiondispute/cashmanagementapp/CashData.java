@@ -1,7 +1,5 @@
 package com.example.transactiondispute.cashmanagementapp;
 
-import java.util.Date;
-
 public class CashData {
     private String date;
     private int indentAmount;
@@ -14,14 +12,15 @@ public class CashData {
     private int eod100Notes;
     private String loadingTime;
     
-    // Excel formula calculations
+    // Calculated values
     private int sumLoadAmount;
     private int sumEodAmount;
+    private int shortLoadAmount;
     private int dueEodAmount;
+    private int carryForwardAmount;
 
     public CashData() {}
 
-    // Constructor
     public CashData(String date, int indentAmount, int sum500Notes, int sum200Notes, 
                    int sum100Notes, String eodReceivedFromPurge, int eod500Notes, 
                    int eod200Notes, int eod100Notes, String loadingTime) {
@@ -36,20 +35,29 @@ public class CashData {
         this.eod100Notes = eod100Notes;
         this.loadingTime = loadingTime;
         
-        // Calculate derived values
         calculateDerivedValues();
     }
 
     private void calculateDerivedValues() {
-        // Excel: =B2*500+C2*200+D2*100
         this.sumLoadAmount = (this.sum500Notes * 500) + (this.sum200Notes * 200) + (this.sum100Notes * 100);
-        
-        // Excel: =G2*500+H2*200+I2*100
         this.sumEodAmount = (this.eod500Notes * 500) + (this.eod200Notes * 200) + (this.eod100Notes * 100);
         
-        // Excel: =F2-J2
-        this.dueEodAmount = (this.eodReceivedFromPurge != null && !this.eodReceivedFromPurge.isEmpty()) 
-            ? Integer.parseInt(this.eodReceivedFromPurge) - this.sumEodAmount : 0;
+        // Short Load = Indent Amount - Actual Load Amount
+        this.shortLoadAmount = Math.max(0, this.indentAmount - this.sumLoadAmount);
+        
+        // Due EOD = EOD Received from Purge - Actual EOD Amount
+        int eodReceived = 0;
+        try {
+            if (this.eodReceivedFromPurge != null && !this.eodReceivedFromPurge.isEmpty()) {
+                eodReceived = Integer.parseInt(this.eodReceivedFromPurge);
+            }
+        } catch (NumberFormatException e) {
+            eodReceived = 0;
+        }
+        this.dueEodAmount = Math.max(0, eodReceived - this.sumEodAmount);
+
+        // Carry Forward = Short Load + Due EOD
+        this.carryForwardAmount = this.shortLoadAmount + this.dueEodAmount;
     }
 
     // Getters and Setters
@@ -57,7 +65,7 @@ public class CashData {
     public void setDate(String date) { this.date = date; calculateDerivedValues(); }
     
     public int getIndentAmount() { return indentAmount; }
-    public void setIndentAmount(int indentAmount) { this.indentAmount = indentAmount; }
+    public void setIndentAmount(int indentAmount) { this.indentAmount = indentAmount; calculateDerivedValues(); }
     
     public int getSum500Notes() { return sum500Notes; }
     public void setSum500Notes(int sum500Notes) { this.sum500Notes = sum500Notes; calculateDerivedValues(); }
@@ -85,5 +93,7 @@ public class CashData {
     
     public int getSumLoadAmount() { return sumLoadAmount; }
     public int getSumEodAmount() { return sumEodAmount; }
+    public int getShortLoadAmount() { return shortLoadAmount; }
     public int getDueEodAmount() { return dueEodAmount; }
+    public int getCarryForwardAmount() { return carryForwardAmount; }
 }

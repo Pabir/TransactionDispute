@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.transactiondispute.cashmanagementapp.AdminCashDataActivity;
 import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
 import com.example.transactiondispute.cashmanagementapp.SummaryActivity;
 import com.example.transactiondispute.notecounter.NoteCounterActivity;
@@ -31,14 +32,22 @@ public class LandingActivity extends AppCompatActivity {
         // Transaction Dispute Button
         Button btnTransactionDispute = findViewById(R.id.btnTransactionDispute);
         btnTransactionDispute.setOnClickListener(v -> {
-            Intent intent = new Intent(LandingActivity.this, MainActivity.class);
+            Intent intent = new Intent(LandingActivity.this, TransactionDisputeActivity.class);
             startActivity(intent);
         });
         
         // Cash Management Button
         Button btnCashManagement = findViewById(R.id.btnCashManagement);
         btnCashManagement.setOnClickListener(v -> {
-            Intent intent = new Intent(LandingActivity.this, CashmanagementActivity.class);
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String role = prefs.getString("user_role", "");
+            
+            Intent intent;
+            if ("admin".equalsIgnoreCase(role)) {
+                intent = new Intent(LandingActivity.this, AdminCashDataActivity.class);
+            } else {
+                intent = new Intent(LandingActivity.this, CashmanagementActivity.class);
+            }
             startActivity(intent);
         });
         
