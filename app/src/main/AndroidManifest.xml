@@ -81,6 +81,16 @@
             android:label="ATM Details"
             android:exported="false" />
 
+        <activity
+            android:name=".cashmanagementapp.DispenseEntryActivity"
+            android:label="Dispense Entry"
+            android:exported="false" />
+
+        <activity
+            android:name=".cashmanagementapp.DispenseAnalyticsActivity"
+            android:label="Dispense Analytics"
+            android:exported="false" />
+
         <!-- FileProvider for sharing -->
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -8,6 +8,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.transactiondispute.cashmanagementapp.AdminCashDataActivity;
 import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
+import com.example.transactiondispute.cashmanagementapp.DispenseAnalyticsActivity;
+import com.example.transactiondispute.cashmanagementapp.DispenseEntryActivity;
 import com.example.transactiondispute.cashmanagementapp.SummaryActivity;
 import com.example.transactiondispute.notecounter.NoteCounterActivity;
 
@@ -29,6 +31,15 @@ public class LandingActivity extends AppCompatActivity {
     }
     
     private void setupNavigation() {
+        // Dispense Performance Section
+        findViewById(R.id.btnDispenseEntry).setOnClickListener(v -> {
+            startActivity(new Intent(LandingActivity.this, DispenseEntryActivity.class));
+        });
+        
+        findViewById(R.id.btnDispenseAnalytics).setOnClickListener(v -> {
+            startActivity(new Intent(LandingActivity.this, DispenseAnalyticsActivity.class));
+        });
+
         // Transaction Dispute Button
         Button btnTransactionDispute = findViewById(R.id.btnTransactionDispute);
         btnTransactionDispute.setOnClickListener(v -> {

@@ -1,6 +1,7 @@
 package com.example.transactiondispute.api;
 
 import com.example.transactiondispute.models.AuthModels;
+import com.example.transactiondispute.models.DispenseData;
 import java.util.List;
 import java.util.Map;
 import okhttp3.ResponseBody;
@@ -59,5 +60,23 @@ public interface SupabaseService {
     Call<ResponseBody> insertCashData(
         @Header("Authorization") String authHeader,
         @Body Map<String, Object> cashData
+    );
+
+    // Dispense Data API
+    @Headers({
+        "Content-Type: application/json",
+        "Prefer: resolution=merge-duplicates"
+    })
+    @POST("rest/v1/dispense_data")
+    Call<ResponseBody> upsertDispenseData(
+        @Header("Authorization") String authHeader,
+        @Body DispenseData data
+    );
+
+    @GET("rest/v1/dispense_data")
+    Call<List<DispenseData>> getDispenseData(
+        @Header("Authorization") String authHeader,
+        @Query("select") String select,
+        @Query("franchisee_id") String franchiseeFilter
     );
 }
