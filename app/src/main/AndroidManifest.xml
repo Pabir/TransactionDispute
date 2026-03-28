@@ -91,6 +91,11 @@
             android:label="Dispense Analytics"
             android:exported="false" />
 
+        <activity
+            android:name=".cashmanagementapp.AdminDispenseListActivity"
+            android:label="Select ATM"
+            android:exported="false" />
+
         <!-- FileProvider for sharing -->
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,11 +1,13 @@
 package com.example.transactiondispute.cashmanagementapp;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,10 +28,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -43,6 +46,7 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
     private TextView tvDayStats, tvDayPercent;
     private TextView tvWeekStats, tvWeekPercent;
     private TextView tvMonthStats, tvMonthPercent;
+    private Spinner spinnerDay, spinnerWeek, spinnerMonth;
     private ProgressBar progressBar;
     private Button btnRefresh;
     private BarChart barChart;
@@ -65,7 +69,11 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
     private void loadSession() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         accessToken = prefs.getString("access_token", "");
-        franchiseeId = prefs.getString("franchisee_id", "");
+        if (getIntent().hasExtra("EXTRA_FRANCHISEE_ID")) {
+            franchiseeId = getIntent().getStringExtra("EXTRA_FRANCHISEE_ID");
+        } else {
+            franchiseeId = prefs.getString("franchisee_id", "");
+        }
     }
 
     private void initRetrofit() {
@@ -94,13 +102,21 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         tvWeekPercent = findViewById(R.id.tvWeekPercent);
         tvMonthStats = findViewById(R.id.tvMonthStats);
         tvMonthPercent = findViewById(R.id.tvMonthPercent);
+        
+        spinnerDay = findViewById(R.id.spinnerDay);
+        spinnerWeek = findViewById(R.id.spinnerWeek);
+        spinnerMonth = findViewById(R.id.spinnerMonth);
+        
         progressBar = findViewById(R.id.progressBar);
         btnRefresh = findViewById(R.id.btnRefresh);
         barChart = findViewById(R.id.barChart);
         tabLayout = findViewById(R.id.tabLayout);
 
-        setupChart();
+        if (getIntent().hasExtra("EXTRA_FRANCHISEE_ID")) {
+            setTitle("Analytics: " + franchiseeId);
+        }
 
+        setupChart();
         btnRefresh.setOnClickListener(v -> loadAnalytics());
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -113,6 +129,37 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        
+        setupSpinners();
+    }
+
+    private void setupSpinners() {
+        spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateDayAnalysis(parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        spinnerWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateWeekAnalysis(parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateMonthAnalysis(parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     private void setupChart() {
@@ -122,12 +169,13 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         barChart.setMaxVisibleValueCount(60);
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(false);
+        barChart.setExtraOffsets(5f, 5f, 5f, 30f);
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
-        xAxis.setLabelCount(7);
+        xAxis.setLabelRotationAngle(-90f);
 
         barChart.getAxisLeft().setDrawGridLines(false);
         barChart.getAxisRight().setEnabled(false);
@@ -135,6 +183,8 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
     }
 
     private void loadAnalytics() {
+        if (franchiseeId == null || franchiseeId.isEmpty()) return;
+        
         progressBar.setVisibility(View.VISIBLE);
         String authHeader = "Bearer " + accessToken;
         String filter = "eq." + franchiseeId;
@@ -145,19 +195,113 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     allData = response.body();
-                    calculateAnalytics(allData);
+                    populateSpinners();
                     updateChart(tabLayout.getSelectedTabPosition());
-                } else {
-                    Toast.makeText(DispenseAnalyticsActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<List<DispenseData>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(DispenseAnalyticsActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void populateSpinners() {
+        Set<String> days = new HashSet<>();
+        Set<String> weeks = new HashSet<>();
+        Set<String> months = new HashSet<>();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar cal = Calendar.getInstance();
+
+        for (DispenseData data : allData) {
+            days.add(data.entryDate);
+            months.add(data.entryDate.substring(0, 7)); // yyyy-MM
+            try {
+                Date d = sdf.parse(data.entryDate);
+                cal.setTime(d);
+                int week = cal.get(Calendar.WEEK_OF_YEAR);
+                int year = cal.get(Calendar.YEAR);
+                weeks.add(year + "-W" + (week < 10 ? "0" + week : week));
+            } catch (Exception e) {}
+        }
+
+        // Proper sorting for Spinner items (Descending order)
+        List<String> sortedDays = new ArrayList<>(days);
+        Collections.sort(sortedDays, Collections.reverseOrder());
+        updateSpinner(spinnerDay, sortedDays);
+
+        List<String> sortedWeeks = new ArrayList<>(weeks);
+        Collections.sort(sortedWeeks, Collections.reverseOrder());
+        updateSpinner(spinnerWeek, sortedWeeks);
+
+        List<String> sortedMonths = new ArrayList<>(months);
+        Collections.sort(sortedMonths, Collections.reverseOrder());
+        updateSpinner(spinnerMonth, sortedMonths);
+    }
+
+    private void updateSpinner(Spinner spinner, List<String> items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private void updateDayAnalysis(String selectedDay) {
+        long indent = 0, dispense = 0;
+        for (DispenseData data : allData) {
+            if (data.entryDate.equals(selectedDay)) {
+                indent += data.indentAmount;
+                dispense += data.dispenseAmount;
+            }
+        }
+        updateUI(tvDayStats, tvDayPercent, indent, dispense);
+    }
+
+    private void updateWeekAnalysis(String selectedWeek) {
+        long indent = 0, dispense = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar cal = Calendar.getInstance();
+        
+        for (DispenseData data : allData) {
+            try {
+                Date d = sdf.parse(data.entryDate);
+                cal.setTime(d);
+                int weekNum = cal.get(Calendar.WEEK_OF_YEAR);
+                int yearNum = cal.get(Calendar.YEAR);
+                String weekKey = yearNum + "-W" + (weekNum < 10 ? "0" + weekNum : weekNum);
+                
+                if (weekKey.equals(selectedWeek)) {
+                    indent += data.indentAmount;
+                    dispense += data.dispenseAmount;
+                }
+            } catch (Exception e) {}
+        }
+        updateUI(tvWeekStats, tvWeekPercent, indent, dispense);
+    }
+
+    private void updateMonthAnalysis(String selectedMonth) {
+        long indent = 0, dispense = 0;
+        for (DispenseData data : allData) {
+            if (data.entryDate.startsWith(selectedMonth)) {
+                indent += data.indentAmount;
+                dispense += data.dispenseAmount;
+            }
+        }
+        updateUI(tvMonthStats, tvMonthPercent, indent, dispense);
+    }
+
+    private void updateUI(TextView statsView, TextView percentView, long indent, long dispense) {
+        statsView.setText(String.format(Locale.US, "Indent: ₹%d | Dispense: ₹%d", indent, dispense));
+        if (indent > 0) {
+            double percent = (double) dispense / indent * 100;
+            percentView.setText(String.format(Locale.US, "Performance: %.2f%%", percent));
+            if (percent < 80) percentView.setTextColor(0xFFD32F2F);
+            else if (percent < 95) percentView.setTextColor(0xFFFF9800);
+            else percentView.setTextColor(0xFF4CAF50);
+        } else {
+            percentView.setText("Performance: N/A");
+            percentView.setTextColor(0xFF757575);
+        }
     }
 
     private void updateChart(int position) {
@@ -168,44 +312,34 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
 
         switch (position) {
-            case 0: // Daily (Last 10 days)
-                for (DispenseData data : allData) {
-                    groupedData.put(data.entryDate, data.numTransactions);
-                }
-                // Keep only last 10
+            case 0: // Daily
+                for (DispenseData data : allData) groupedData.put(data.entryDate, data.numTransactions);
                 if (groupedData.size() > 10) {
                     List<String> keys = new ArrayList<>(groupedData.keySet());
                     for (int i = 0; i < keys.size() - 10; i++) groupedData.remove(keys.get(i));
                 }
                 break;
-
             case 1: // Weekly
                 for (DispenseData data : allData) {
                     try {
                         Date d = sdf.parse(data.entryDate);
                         cal.setTime(d);
-                        int week = cal.get(Calendar.WEEK_OF_YEAR);
-                        int year = cal.get(Calendar.YEAR);
-                        String key = year + "-W" + week;
+                        String key = cal.get(Calendar.YEAR) + "-W" + cal.get(Calendar.WEEK_OF_YEAR);
                         groupedData.put(key, groupedData.getOrDefault(key, 0) + data.numTransactions);
                     } catch (Exception e) {}
                 }
                 break;
-
             case 2: // Monthly
                 for (DispenseData data : allData) {
-                    String key = data.entryDate.substring(0, 7); // yyyy-MM
+                    String key = data.entryDate.substring(0, 7);
                     groupedData.put(key, groupedData.getOrDefault(key, 0) + data.numTransactions);
                 }
                 break;
-
             case 3: // Quarterly
                 for (DispenseData data : allData) {
                     try {
-                        String month = data.entryDate.substring(5, 7);
-                        int m = Integer.parseInt(month);
-                        int q = (m - 1) / 3 + 1;
-                        String key = data.entryDate.substring(0, 4) + "-Q" + q;
+                        int m = Integer.parseInt(data.entryDate.substring(5, 7));
+                        String key = data.entryDate.substring(0, 4) + "-Q" + ((m - 1) / 3 + 1);
                         groupedData.put(key, groupedData.getOrDefault(key, 0) + data.numTransactions);
                     } catch (Exception e) {}
                 }
@@ -215,92 +349,27 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         List<BarEntry> entries = new ArrayList<>();
         final List<String> labels = new ArrayList<>(groupedData.keySet());
         int i = 0;
-        for (String label : labels) {
-            entries.add(new BarEntry(i++, groupedData.get(label)));
-        }
+        for (String label : labels) entries.add(new BarEntry(i++, groupedData.get(label)));
 
         BarDataSet set = new BarDataSet(entries, "Transactions");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
-        set.setValueTextSize(10f);
-
         BarData data = new BarData(set);
-        barChart.setData(data);
+        data.setBarWidth(labels.size() > 20 ? 0.4f : labels.size() > 10 ? 0.6f : 0.85f);
         
+        barChart.setData(data);
         barChart.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 int index = (int) value;
                 if (index >= 0 && index < labels.size()) {
                     String label = labels.get(index);
-                    if (label.length() > 5) return label.substring(2); // Shorten for display
-                    return label;
+                    return (position == 0 && label.length() >= 10) ? label.substring(5) : label.length() > 5 ? label.substring(2) : label;
                 }
                 return "";
             }
         });
-
+        barChart.setFitBars(true);
         barChart.animateY(1000);
         barChart.invalidate();
-    }
-
-    private void calculateAnalytics(List<DispenseData> dataList) {
-        if (dataList.isEmpty()) return;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String today = sdf.format(new Date());
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -7);
-        Date weekAgo = cal.getTime();
-
-        cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -30);
-        Date monthAgo = cal.getTime();
-
-        long dayIndent = 0, dayDispense = 0;
-        long weekIndent = 0, weekDispense = 0;
-        long monthIndent = 0, monthDispense = 0;
-
-        for (DispenseData data : dataList) {
-            try {
-                Date entryDate = sdf.parse(data.entryDate);
-                
-                if (data.entryDate.equals(today)) {
-                    dayIndent += data.indentAmount;
-                    dayDispense += data.dispenseAmount;
-                }
-
-                if (entryDate.after(weekAgo)) {
-                    weekIndent += data.indentAmount;
-                    weekDispense += data.dispenseAmount;
-                }
-
-                if (entryDate.after(monthAgo)) {
-                    monthIndent += data.indentAmount;
-                    monthDispense += data.dispenseAmount;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        updateUI(tvDayStats, tvDayPercent, dayIndent, dayDispense);
-        updateUI(tvWeekStats, tvWeekPercent, weekIndent, weekDispense);
-        updateUI(tvMonthStats, tvMonthPercent, monthIndent, monthDispense);
-    }
-
-    private void updateUI(TextView statsView, TextView percentView, long indent, long dispense) {
-        statsView.setText(String.format(Locale.US, "Indent: ₹%d | Dispense: ₹%d", indent, dispense));
-        if (indent > 0) {
-            double percent = (double) dispense / indent * 100;
-            percentView.setText(String.format(Locale.US, "Performance: %.2f%%", percent));
-            
-            if (percent < 80) percentView.setTextColor(0xFFD32F2F); // Red
-            else if (percent < 95) percentView.setTextColor(0xFFFF9800); // Orange
-            else percentView.setTextColor(0xFF4CAF50); // Green
-        } else {
-            percentView.setText("Performance: N/A");
-            percentView.setTextColor(0xFF757575);
-        }
     }
 }

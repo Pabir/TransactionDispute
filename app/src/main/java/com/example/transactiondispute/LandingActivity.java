@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.transactiondispute.cashmanagementapp.AdminCashDataActivity;
+import com.example.transactiondispute.cashmanagementapp.AdminDispenseListActivity;
 import com.example.transactiondispute.cashmanagementapp.CashmanagementActivity;
 import com.example.transactiondispute.cashmanagementapp.DispenseAnalyticsActivity;
 import com.example.transactiondispute.cashmanagementapp.DispenseEntryActivity;
@@ -37,7 +38,18 @@ public class LandingActivity extends AppCompatActivity {
         });
         
         findViewById(R.id.btnDispenseAnalytics).setOnClickListener(v -> {
-            startActivity(new Intent(LandingActivity.this, DispenseAnalyticsActivity.class));
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String role = prefs.getString("user_role", "");
+            
+            Intent intent;
+            if ("admin".equalsIgnoreCase(role)) {
+                // For admin, show list of ATMs to select from
+                intent = new Intent(LandingActivity.this, AdminDispenseListActivity.class);
+            } else {
+                // For franchisee, show their own analytics directly
+                intent = new Intent(LandingActivity.this, DispenseAnalyticsActivity.class);
+            }
+            startActivity(intent);
         });
 
         // Transaction Dispute Button
@@ -76,7 +88,7 @@ public class LandingActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
-        // Mailing Button - ADD THIS
+        // Mailing Button
         Button btnMailing = findViewById(R.id.btnMailing);
         btnMailing.setOnClickListener(v -> {
             Intent intent = new Intent(LandingActivity.this, MailingActivity.class);

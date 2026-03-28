@@ -194,6 +194,7 @@ public class DataEntryActivity extends AppCompatActivity {
         et500Notes.addTextChangedListener(tw);
         et200Notes.addTextChangedListener(tw);
         et100Notes.addTextChangedListener(tw);
+        etEodReceived.addTextChangedListener(tw);
         etEod500.addTextChangedListener(tw);
         etEod200.addTextChangedListener(tw);
         etEod100.addTextChangedListener(tw);
@@ -203,8 +204,12 @@ public class DataEntryActivity extends AppCompatActivity {
         int loadTotal = (getIntValue(et500Notes) * 500) + (getIntValue(et200Notes) * 200) + (getIntValue(et100Notes) * 100);
         tvLoadAmount.setText("Load: ₹" + loadTotal);
 
-        int eodTotal = (getIntValue(etEod500) * 500) + (getIntValue(et200Notes) * 200) + (getIntValue(et100Notes) * 100);
+        int eodReceived = getIntValue(etEodReceived);
+        int eodTotal = (getIntValue(etEod500) * 500) + (getIntValue(etEod200) * 200) + (getIntValue(etEod100) * 100);
         tvEodAmount.setText("EOD Amount: ₹" + eodTotal);
+        
+        int dueAmount = eodReceived - eodTotal;
+        tvDueEodAmount.setText("Due EOD Amount: ₹" + dueAmount);
     }
 
     private int getIntValue(EditText et) {

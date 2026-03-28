@@ -85,13 +85,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Day-wise Analysis"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Day-wise Analysis"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+                        <Spinner
+                            android:id="@+id/spinnerDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/tvDayStats"
                         android:layout_width="match_parent"
@@ -121,13 +132,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Week-wise Analysis"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Week-wise Analysis"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+                        <Spinner
+                            android:id="@+id/spinnerWeek"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/tvWeekStats"
                         android:layout_width="match_parent"
@@ -157,13 +179,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Month-wise Analysis"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Month-wise Analysis"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+                        <Spinner
+                            android:id="@+id/spinnerMonth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/tvMonthStats"
                         android:layout_width="match_parent"
