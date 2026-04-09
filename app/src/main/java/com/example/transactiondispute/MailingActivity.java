@@ -78,7 +78,7 @@ public class MailingActivity extends AppCompatActivity {
     private void sendEodEmail(String atmId) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mf.teacheasyservices.com"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mf.teacheasyservices@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "EOD Request - " + atmId + " - " + franchiseeId);
         intent.putExtra(Intent.EXTRA_TEXT, "Requesting EOD for ATM: " + atmId + "\nFranchisee: " + franchiseeId);
         startActivity(Intent.createChooser(intent, "Send Email"));

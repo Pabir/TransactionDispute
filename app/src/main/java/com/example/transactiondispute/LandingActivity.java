@@ -55,7 +55,17 @@ public class LandingActivity extends AppCompatActivity {
         // Transaction Dispute Button
         Button btnTransactionDispute = findViewById(R.id.btnTransactionDispute);
         btnTransactionDispute.setOnClickListener(v -> {
-            Intent intent = new Intent(LandingActivity.this, TransactionDisputeActivity.class);
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String role = prefs.getString("user_role", "");
+            
+            Intent intent;
+            if ("admin".equalsIgnoreCase(role)) {
+                // Admin sees all transactions
+                intent = new Intent(LandingActivity.this, AdminAllTransactionsActivity.class);
+            } else {
+                // Franchisee sees the dispute entry options
+                intent = new Intent(LandingActivity.this, TransactionDisputeActivity.class);
+            }
             startActivity(intent);
         });
         

@@ -89,6 +89,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- UTR -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUtr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="UTR" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Amount -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -192,12 +206,6 @@
             android:orientation="vertical">
 
             <RadioButton
-                android:id="@+id/rbCardSwallowed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Card Swallowed" />
-
-            <RadioButton
                 android:id="@+id/rbTransactionFailed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,18 +216,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Amount Not Dispensed" />
-
-            <RadioButton
-                android:id="@+id/rbPinIssue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PIN Issue" />
-
-            <RadioButton
-                android:id="@+id/rbOtherCardIssue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Other Issue" />
 
         </RadioGroup>
 

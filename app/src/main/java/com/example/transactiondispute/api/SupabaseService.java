@@ -39,6 +39,13 @@ public interface SupabaseService {
         @Body Map<String, Object> transaction
     );
 
+    @GET("rest/v1/transactions")
+    Call<List<Map<String, Object>>> getAllTransactions(
+        @Header("Authorization") String authHeader,
+        @Query("select") String select,
+        @Query("order") String order
+    );
+
     @GET("rest/v1/cash_management")
     Call<List<Map<String, Object>>> getCashData(
         @Header("Authorization") String authHeader,

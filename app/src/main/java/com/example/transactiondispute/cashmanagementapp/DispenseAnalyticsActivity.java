@@ -167,7 +167,9 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         barChart.setDrawValueAboveBar(true);
         barChart.getDescription().setEnabled(false);
         barChart.setMaxVisibleValueCount(60);
-        barChart.setPinchZoom(false);
+        barChart.setPinchZoom(true);
+        barChart.setDragEnabled(true);
+        barChart.setScaleYEnabled(false);
         barChart.setDrawGridBackground(false);
         barChart.setExtraOffsets(5f, 5f, 5f, 30f);
 
@@ -314,10 +316,6 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         switch (position) {
             case 0: // Daily
                 for (DispenseData data : allData) groupedData.put(data.entryDate, data.numTransactions);
-                if (groupedData.size() > 10) {
-                    List<String> keys = new ArrayList<>(groupedData.keySet());
-                    for (int i = 0; i < keys.size() - 10; i++) groupedData.remove(keys.get(i));
-                }
                 break;
             case 1: // Weekly
                 for (DispenseData data : allData) {
@@ -354,7 +352,7 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
         BarDataSet set = new BarDataSet(entries, "Transactions");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         BarData data = new BarData(set);
-        data.setBarWidth(labels.size() > 20 ? 0.4f : labels.size() > 10 ? 0.6f : 0.85f);
+        data.setBarWidth(0.6f);
         
         barChart.setData(data);
         barChart.getXAxis().setValueFormatter(new ValueFormatter() {
@@ -368,7 +366,18 @@ public class DispenseAnalyticsActivity extends AppCompatActivity {
                 return "";
             }
         });
+        
         barChart.setFitBars(true);
+        
+        // Enable horizontal scrolling by limiting the visible X range
+        float visibleRange = 10f; // Number of bars to show at once
+        if (labels.size() > visibleRange) {
+            barChart.setVisibleXRangeMaximum(visibleRange);
+            barChart.moveViewToX(labels.size()); // Scroll to the end (latest data)
+        } else {
+            barChart.setVisibleXRangeMaximum(labels.size());
+        }
+
         barChart.animateY(1000);
         barChart.invalidate();
     }

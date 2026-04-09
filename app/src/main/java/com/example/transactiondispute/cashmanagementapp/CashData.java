@@ -43,7 +43,8 @@ public class CashData {
         this.sumEodAmount = (this.eod500Notes * 500) + (this.eod200Notes * 200) + (this.eod100Notes * 100);
         
         // Short Load = Indent Amount - Actual Load Amount
-        this.shortLoadAmount = Math.max(0, this.indentAmount - this.sumLoadAmount);
+        // User requested: if indent is 0 but loading happened, it should be negative (short load)
+        this.shortLoadAmount = this.indentAmount - this.sumLoadAmount;
         
         // Due EOD = EOD Received from Purge - Actual EOD Amount
         int eodReceived = 0;
@@ -54,7 +55,7 @@ public class CashData {
         } catch (NumberFormatException e) {
             eodReceived = 0;
         }
-        this.dueEodAmount = Math.max(0, eodReceived - this.sumEodAmount);
+        this.dueEodAmount = eodReceived - this.sumEodAmount;
 
         // Carry Forward = Short Load + Due EOD
         this.carryForwardAmount = this.shortLoadAmount + this.dueEodAmount;

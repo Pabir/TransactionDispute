@@ -209,16 +209,26 @@ public class MainActivity extends AppCompatActivity {
                     clearForm();
                     Toast.makeText(MainActivity.this, "Saved to Cloud!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "Failed to sync with Cloud", Toast.LENGTH_SHORT).show();
+                    String errorMsg = "Cloud sync failed (" + response.code() + ")";
+                    if (response.code() == 401 || response.code() == 403) {
+                        errorMsg = "Session expired or access denied. Please re-login.";
+                    }
+                    Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    
+                    // Fallback: save locally anyway so they can still export it
+                    transactionList.add(transaction);
+                    updateTransactionsView();
+                    clearForm();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 btnAddTransaction.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Network Error: Data saved locally only", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Network error. Saved locally.", Toast.LENGTH_SHORT).show();
                 transactionList.add(transaction);
                 updateTransactionsView();
+                clearForm();
             }
         });
     }
@@ -277,29 +287,13 @@ public class MainActivity extends AppCompatActivity {
         rgTransactionType.clearCheck();
     }
 
-    // Storage and Export Logic (Kept from original)
+    // Storage and Export Logic
     private void checkPermissionAndExport() {
         if (transactionList.isEmpty()) {
             Toast.makeText(this, "No transactions to export", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (isStoragePermissionGranted()) exportToExcel();
-        else requestStoragePermission();
-    }
-
-    private boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return Environment.isExternalStorageManager();
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, MANAGE_STORAGE_PERMISSION_CODE);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        }
+        exportToExcel();
     }
 
     private void exportToExcel() {
@@ -312,33 +306,92 @@ public class MainActivity extends AppCompatActivity {
                           .append(t.getTransactionType()).append("\n");
             }
             String fileName = "Transactions_" + System.currentTimeMillis() + ".csv";
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+            
+            // Use app-specific internal directory to avoid permission issues on Android 11+
+            File file = new File(getExternalFilesDir(null), fileName);
+            
             FileOutputStream out = new FileOutputStream(file);
             out.write(csvContent.toString().getBytes());
             out.close();
+            
             currentExportedFile = file;
-            Toast.makeText(this, "Exported to Downloads!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Exported Successfully!", Toast.LENGTH_SHORT).show();
+            
+            // Automatically enable buttons
+            btnShareWhatsApp.setEnabled(true);
+            btnSendEmail.setEnabled(true);
         } catch (IOException e) {
-            Toast.makeText(this, "Export Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Export Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void shareToWhatsApp() {
-        if (currentExportedFile == null) return;
-        Uri fileUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", currentExportedFile);
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/csv");
-        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(intent, "Share via"));
+        if (currentExportedFile == null) {
+            Toast.makeText(this, "Please export first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            Uri fileUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", currentExportedFile);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/csv");
+            intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(intent, "Share via"));
+        } catch (Exception e) {
+            Toast.makeText(this, "Sharing failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void sendEnhancedEmail() {
-        if (currentExportedFile == null) return;
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Transaction Dispute Report - " + franchiseeId);
-        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getPackageName() + ".provider", currentExportedFile));
-        startActivity(Intent.createChooser(intent, "Send Email"));
+        if (currentExportedFile == null) {
+            Toast.makeText(this, "Please export first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            
+            String[] to = {"WLASupport@hitachi-payments.com"};
+            String[] cc = {"mf.techeasyservices@gmail.com", "dibyendu.majumder@hitachi-payments.com"};
+            
+            intent.putExtra(Intent.EXTRA_EMAIL, to);
+            intent.putExtra(Intent.EXTRA_CC, cc);
+
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Transaction Dispute Report - " + franchiseeId);
+            intent.putExtra(Intent.EXTRA_TEXT, createEmailBody());
+            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getPackageName() + ".provider", currentExportedFile));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(intent, "Send Email"));
+        } catch (Exception e) {
+            Toast.makeText(this, "Email failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String createEmailBody() {
+        StringBuilder body = new StringBuilder();
+        body.append("Dear Support Team,\n\n");
+        body.append("I am reporting ").append(transactionList.size()).append(" transaction dispute(s).\n\n");
+        body.append("DETAILED TRANSACTIONS:\n");
+        
+        for (int i = 0; i < transactionList.size(); i++) {
+            Transaction t = transactionList.get(i);
+            body.append("\nTransaction ").append(i + 1).append(":\n");
+            body.append("  • ATM ID: ").append(t.getAtmId()).append("\n");
+            body.append("  • Transaction Date: ").append(t.getTransDate()).append("\n");
+            body.append("  • Time: ").append(t.getTime()).append("\n");
+            body.append("  • Transaction ID: ").append(t.getTransactionId()).append("\n");
+            body.append("  • UTR: ").append(t.getUtr()).append("\n");
+            body.append("  • Customer Name: ").append(t.getCustomerName()).append("\n");
+            body.append("  • Customer Mobile: ").append(t.getCustomerMobileNumber()).append("\n");
+            body.append("  • Bank Name: ").append(t.getBankName()).append("\n");
+            body.append("  • Dispute Amount: ₹").append(t.getDisputeAmount()).append("\n");
+            body.append("  • Transaction Type: ").append(t.getTransactionType()).append("\n");
+        }
+        
+        body.append("\nPlease find the detailed report attached in CSV format.\n\n");
+        body.append("Best regards,\n");
+        body.append("Franchisee ID: ").append(franchiseeId);
+        
+        return body.toString();
     }
 }
