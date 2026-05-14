@@ -29,6 +29,12 @@ public interface SupabaseService {
         @Query("id") String userId
     );
 
+    @GET("rest/v1/profiles")
+    Call<List<AuthModels.Profile>> getProfiles(
+        @Header("Authorization") String authHeader,
+        @Query("select") String select
+    );
+
     @Headers({
         "Content-Type: application/json",
         "Prefer: return=minimal"
